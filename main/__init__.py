@@ -48,6 +48,7 @@ def create_app(config_class=Config):
 
     # models
     from .modules.people import models
+    from .modules.shifts import models
 
     # database
     db.app = app

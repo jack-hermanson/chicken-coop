@@ -1,10 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>More Chicken Coop | {{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="{{ url_for("static", filename="node_modules/htmx.org/dist/htmx.min.js") }}"></script>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container">
+        <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex">
+            <img alt="logo" src="{{ url_for("static", filename="logo-transparent.png") }}" height="42"
+                 class="d-inline-block align-text-top logo">
+            <span class="d-inline-block my-auto pt-1 ms-2">Morey Chicken Coop</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="navbar-nav me-auto">
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="mb-0">{{ message }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<div class="container main-container pb-3">
+    <div class="row">
+        <div class="col-12 mb-2">
+            <div class="page-title">
+                <h2>
+                    {% if title %}
+                    {{ text_title if text_title else title }}
+                    {% endif %}
+                </h2>
+                <div class="actions">
+                    {% block actions %}
+                    {% endblock actions %}
+                </div>
+            </div>
+            <hr class="mt-1" />
+        </div>
+    </div>
+    {% block body %}
+    {% endblock body %}
+</div>
+
+{% block modals %}{% endblock modals %}
+
+<script src="{{ url_for("static", filename="node_modules/bootstrap/dist/js/bootstrap.bundle.js") }}"></script>
+
+{% block scripts %}{% endblock scripts %}
 
 </body>
 </html>
