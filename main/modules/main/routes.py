@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, url_for, request, make_response
-from main import logger
+from main import logger, db
+from main.modules.shifts.models import Shift
+from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
 
 main = Blueprint("main", __name__, url_prefix="")
 
@@ -18,3 +20,27 @@ def test():
                                              prefilled_name=name))
     response.set_cookie("name", name)
     return response
+
+
+@main.route("/seed-db")
+def seed_db():
+    if db.session.query(Shift).count() != 0:
+        return {"status": "already done!"}, 400
+
+    times_of_day = [TimeOfDayEnum.MORNING, TimeOfDayEnum.AFTERNOON]
+    days_of_week = [DayOfWeekEnum.MONDAY, DayOfWeekEnum.TUESDAY, DayOfWeekEnum.WEDNESDAY, DayOfWeekEnum.THURSDAY,
+                    DayOfWeekEnum.FRIDAY, DayOfWeekEnum.SATURDAY, DayOfWeekEnum.SUNDAY]
+
+    for day_of_week in days_of_week:
+        for time_of_day in times_of_day:
+            shift = Shift(
+                day_of_week=day_of_week,
+                time_of_day=time_of_day
+            )
+            db.session.add(shift)
+            db.session.commit()
+
+    return [
+        (str(DayOfWeekEnum(s.day_of_week)), str(TimeOfDayEnum(s.time_of_day)))
+        for s in Shift.query.all()
+    ]
