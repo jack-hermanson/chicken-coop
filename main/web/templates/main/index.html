@@ -1,19 +1,27 @@
 {% extends "base.html" %}
 
-{% set title = "Home" %}
+{% from "macros/card.html" import simple_card, card_body, card_header %}
+
+{% set title = "Shifts" %}
 {% set active_route = "main" %}
 
 {% block body %}
+    <div class="row mb-3">
+        <div class="col-12">
+            <p class="lead">Every day has two shifts—one for the morning and one for the afternoon/evening.</p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
-            <p class="lead">Welcome to Morey Chicken Coop.</p>
-            <button class="btn btn-secondary">hi</button>
-            <br><br><br>
-
-            <form action="{{ url_for('main.test') }}" method="POST">
-                <label for="name" class="form-label">Name</label>
-                <input id="name" name="name" type="text" class="form-control" value="{{ prefilled_name }}">
-            </form>
+            <ul class="list-group">
+                {% for shift_instance in shift_instances %}
+                    <li class="list-group-item d-block">
+                        {{ shift_instance.shift.day_of_week|day_of_week_str }}
+                        {{ shift_instance.shift.time_of_day|time_of_day_str }}
+                        {{ shift_instance.due_date|extract_date }}
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock body %}

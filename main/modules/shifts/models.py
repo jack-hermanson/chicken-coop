@@ -12,6 +12,10 @@ class Shift(db.Model):
     day_of_week = db.Column(db.Integer, nullable=False, default=DayOfWeekEnum.MONDAY)
     time_of_day = db.Column(db.Integer, nullable=False, default=TimeOfDayEnum.MORNING)
 
+    # who this is assigned to
+    person_id = db.mapped_column(db.ForeignKey("person.person_id"), nullable=True)
+    person = db.relationship("Person", back_populates="shifts")
+
     shift_instances = db.relationship("ShiftInstance", back_populates="shift", cascade="all, delete-orphan")
 
 
@@ -23,3 +27,8 @@ class ShiftInstance(db.Model):
 
     shift_id = db.mapped_column(db.ForeignKey("shift.shift_id"), nullable=False)
     shift = db.relationship("Shift", back_populates="shift_instances")
+    due_date = db.Column(db.DateTime, nullable=False)
+    completed_timestamp = db.Column(db.DateTime, nullable=True)
+    completed_by = db.Column(db.String(32), nullable=True)
+
+

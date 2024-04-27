@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, date, time
 
 from main import logger
-from .date_time_enums import DayOfWeekEnum
+from .date_time_enums import DayOfWeekEnum, TimeOfDayEnum
 
 
 def get_next_date_with_same_day_of_week(day_of_week: DayOfWeekEnum, exclude_today=True,
@@ -52,6 +52,13 @@ def extract_datetime(date_or_datetime: date | datetime) -> datetime:
 def day_of_week_str(raw):
     try:
         return DayOfWeekEnum(int(raw)).name.capitalize()
+    except Exception as e:
+        return e.__str__()
+
+
+def time_of_day_str(raw):
+    try:
+        return TimeOfDayEnum(int(raw)).name.capitalize()
     except Exception as e:
         return e.__str__()
 

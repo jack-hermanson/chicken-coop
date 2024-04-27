@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, url_for, request, make_response, s
 from main import logger, db
 from main.modules.shifts.models import Shift
 from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
+from ..shifts import services as shift_services
 
 main = Blueprint("main", __name__, url_prefix="")
 
@@ -11,17 +12,11 @@ def index():
     session.permanent = True
     name = request.cookies.get("name") or ""
     return render_template("main/index.html",
-                           prefilled_name=name)
+                           prefilled_name=name,
+                           shift_instances=shift_services.generate_shift_instances())
 
 
-@main.route("/hello-there/<int:id_num>")
-def hello_there(id_num: int):
-    return render_template("main/path-test.html",
-                           id_num=id_num)
-
-
-
-
+# todo - delete
 @main.route("/submit-form", methods=["POST"])
 def test():
     name = request.form.get("name")
@@ -31,8 +26,8 @@ def test():
     return response
 
 
-@main.route("/seed-db")
-def seed_db():
+@main.route("/seed-shifts")
+def seed_shifts():
     if db.session.query(Shift).count() != 0:
         return {"status": "already done!"}, 400
 

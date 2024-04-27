@@ -6,14 +6,15 @@ class TimeOfDayEnum(IntEnum):
     AFTERNOON = 2
 
 
+# These start at 0 because date.today().weekday() starts at 0 for Monday
 class DayOfWeekEnum(IntEnum):
-    MONDAY = 1
-    TUESDAY = 2
-    WEDNESDAY = 3
-    THURSDAY = 4
-    FRIDAY = 5
-    SATURDAY = 6
-    SUNDAY = 7
+    MONDAY = 0
+    TUESDAY = 1
+    WEDNESDAY = 2
+    THURSDAY = 3
+    FRIDAY = 4
+    SATURDAY = 5
+    SUNDAY = 6
 
 
 class MonthEnum(IntEnum):

@@ -79,6 +79,11 @@ def create_app(config_class=Config):
         return date_functions.day_of_week_str(raw)
 
     @app.template_filter()
+    def time_of_day_str(raw):
+        from utils import date_functions
+        return date_functions.time_of_day_str(raw)
+
+    @app.template_filter()
     def extract_date(date_or_datetime: date | datetime):
         from utils import date_functions
         return date_functions.extract_date(date_or_datetime)
@@ -91,8 +96,7 @@ def create_app(config_class=Config):
             suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(value % 10, 'th')
         return f"{value}{suffix}"
 
-        # return the app
-
+    # return the app
     print("RUNNING APPLICATION")
     logger.debug("LOGGING IS RUNNING")
     logger.info(f"Running app in environment '{os.environ.get('ENVIRONMENT')}'")

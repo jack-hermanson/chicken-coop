@@ -1,0 +1,27 @@
+{% macro simple_card(class="", id=None) %}
+<div class="card {{ class }}" {% if id %}id="{{ id }}"{% endif %}>
+    {{ caller() }}
+</div>
+{% endmacro %}
+
+{% macro card_header(title, class="") %}
+    <div class="card-header">
+        <h4 class="card-title mb-0">
+            {{ title }}
+        </h4>
+    </div>
+{% endmacro %}
+
+{% macro card_body(title, class="") %}
+    <div class="card-body {{ class }}">
+        <div class="card-text">
+            {{ caller() }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro card_footer(class="") %}
+    <div class="card-footer py-3 {{ class }}">
+        {{ caller() }}
+    </div>
+{% endmacro %}
