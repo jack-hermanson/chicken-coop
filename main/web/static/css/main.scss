@@ -1,7 +1,10 @@
 $enable-rounded: false;
 
+// https://colors.muz.li/palette/d2b48c/938462/fff9ea/9696d2/696993
 $primary: #938462;
 $secondary: #696993;
+$dark: #212838;
+$body-bg-dark: $dark;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 @import "../node_modules/jack-hermanson-css-lib/src/main";
