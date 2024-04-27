@@ -1,0 +1,13 @@
+{
+    "name": "static",
+    "description": "Front-end libraries go here",
+    "dependencies": {
+        "@popperjs/core": "^2.11.8",
+        "bootstrap": "^5.3.3",
+        "htmx.org": "^1.9.12",
+        "jack-hermanson-css-lib": "^1.3.0"
+    },
+    "devDependencies": {
+        "sass": "^1.75.0"
+    }
+}
