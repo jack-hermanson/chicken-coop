@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% set title = "Path Test" %}
+{% set active_route = "main" %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <p>request.path: {{ request.path }}</p>
+            <p>request.full_path {{ request.full_path }}</p>
+            <p>request.url {{ request.url }}</p>
+        </div>
+    </div>
+{% endblock body %}

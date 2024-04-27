@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request, make_response
+from flask import Blueprint, render_template, url_for, request, make_response, session
 from main import logger, db
 from main.modules.shifts.models import Shift
 from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
@@ -8,9 +8,18 @@ main = Blueprint("main", __name__, url_prefix="")
 
 @main.route("/")
 def index():
+    session.permanent = True
     name = request.cookies.get("name") or ""
     return render_template("main/index.html",
                            prefilled_name=name)
+
+
+@main.route("/hello-there/<int:id_num>")
+def hello_there(id_num: int):
+    return render_template("main/path-test.html",
+                           id_num=id_num)
+
+
 
 
 @main.route("/submit-form", methods=["POST"])
