@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint, render_template, url_for, request, make_response, session
 from main import logger, db
 from main.modules.shifts.models import Shift
@@ -13,7 +15,8 @@ def index():
     name = request.cookies.get("name") or ""
     return render_template("main/index.html",
                            prefilled_name=name,
-                           shift_instances=shift_services.generate_shift_instances())
+                           shift_instances=shift_services.generate_shift_instances(),
+                           load_time=datetime.datetime.now())
 
 
 # todo - delete

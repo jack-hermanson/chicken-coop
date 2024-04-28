@@ -9,6 +9,7 @@
     <div class="row mb-3">
         <div class="col-12">
             <p class="lead">Every day has two shifts—one for the morning and one for the afternoon/evening.</p>
+            <p>This page was loaded at {{ load_time }}</p>
         </div>
     </div>
     <div class="row">
@@ -16,9 +17,9 @@
             <ul class="list-group">
                 {% for shift_instance in shift_instances %}
                     <li class="list-group-item d-block">
-                        {{ shift_instance.shift.day_of_week|day_of_week_str }}
-                        {{ shift_instance.shift.time_of_day|time_of_day_str }}
-                        {{ shift_instance.due_date|extract_date }}
+                        <h5>{{ shift_instance.due_date.strftime("%A, %b %e") }}: {{ shift_instance.shift.time_of_day|time_of_day_str }}</h5>
+
+                        <p class="mb-0">This shift instance has {% if not shift_instance.completed_timestamp %}NOT{% endif %} been completed</p>
                     </li>
                 {% endfor %}
             </ul>
