@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
-{% from "macros/card.html" import simple_card, card_body, card_header %}
+{% from "macros/card.html" import simple_card, card_body, card_header, card_footer %}
 {% from "macros/pagination.html" import pagination %}
+{% from "macros/form.html" import form_group %}
 
 {% set title = "Shifts" %}
 {% set active_route = "main" %}
@@ -14,19 +15,49 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <ul class="list-group">
-                {% for shift_instance in next_shift_instances %}
-                    <li class="list-group-item d-block">
+            {% for shift_instance in next_shift_instances %}
+                {% call simple_card(class="mb-4") %}
+                    {{ card_header(shift_instance.due_date.strftime("%A, %b %e") + ": " + shift_instance.shift.time_of_day|time_of_day_str) }}
+
+                    {% call card_body(class="py-3") %}
                         {% if todays_date == shift_instance.due_date.date() %}
                             Due today!
                         {% endif %}
-                        <h5>{{ shift_instance.due_date.strftime("%A, %b %e") }}: {{ shift_instance.shift.time_of_day|time_of_day_str }}</h5>
-
                         <p class="mb-0">This shift instance has {% if not shift_instance.completed_timestamp %}
                             NOT{% endif %} been completed</p>
-                    </li>
-                {% endfor %}
-            </ul>
+                        <div id="shift-instance-form-container-{{ shift_instance.shift_instance_id }}" class="d-none">
+                            <form>
+                                {{ next_shift_instance_forms[loop.index0].csrf_token() }}
+                                <div class="d-flex mb-3">
+                                    {{ form_group(
+                                                    next_shift_instance_forms[loop.index0],
+                                                    "completed_timestamp",
+                                                    required=True,
+                                                    render_kw={"class": "form-control-sm form-control"},
+                                                    class="me-3"
+                                                ) }}
+                                    {{ form_group(next_shift_instance_forms[loop.index0], "completed_by", required=True, render_kw={"class": "form-control-sm form-control"}) }}
+                                    <div class="mt-auto">
+                                        {{ next_shift_instance_forms[loop.index0].submit(class="btn btn-sm btn-success mt-auto ms-3") }}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-success"
+                                    onclick="toggleShiftInstanceForm({{ shift_instance.shift_instance_id }})">Click me
+                            </button>
+                        </div>
+                    {% endcall %}
+                    {% call card_footer() %}
+                        <div class="d-flex">
+                            <div class="ms-auto">
+                                <p class="mb-0">Test</p>
+                            </div>
+                        </div>
+                    {% endcall %}
+                {% endcall %}
+            {% endfor %}
         </div>
     </div>
     <div class="row mt-3">
@@ -44,7 +75,8 @@
                         <h6>{{ previous_shift_instance.due_date.strftime("%A, %b %e") }}: {{ previous_shift_instance.shift.time_of_day|time_of_day_str }}</h6>
                         <p class="mb-0">
                             {% if previous_shift_instance.completed_timestamp %}
-                                Completed by {{ previous_shift_instance.completed_by }} at {{ previous_shift_instance.completed_timestamp }}.
+                                Completed by {{ previous_shift_instance.completed_by }} at
+                                {{ previous_shift_instance.completed_timestamp }}.
                             {% else %}
                                 Not completed.
                             {% endif %}
@@ -65,3 +97,7 @@
         </div>
     </div>
 {% endblock body %}
+
+{% block scripts %}
+    <script defer src="{{ url_for('static', filename='scripts/shift-instance-date.js') }}"></script>
+{% endblock %}

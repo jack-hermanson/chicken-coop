@@ -5,6 +5,7 @@ from main import logger, db
 from main.modules.shifts.models import Shift
 from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
 from ..shifts import services as shift_services
+from ..shifts.forms import ShiftInstanceCompletedTimestampForm
 
 main = Blueprint("main", __name__, url_prefix="")
 
@@ -14,11 +15,23 @@ def index():
     session.permanent = True
     name = request.cookies.get("name") or ""
     page = int(request.args.get("page", default=1, type=int))
+
+    next_shift_instances = shift_services.generate_next_shift_instances()
     previous_shift_instances = shift_services.get_previous_shifts(page)
+
+    next_shift_instance_forms = []
+    for shift_instance in next_shift_instances:
+        form = ShiftInstanceCompletedTimestampForm()
+        if shift_instance.completed_timestamp:
+            form.completed_timestamp.data = shift_instance.completed_timestamp
+            form.completed_by.data = shift_instance.completed_by
+        next_shift_instance_forms.append(form)
+
     return render_template("main/index.html",
                            prefilled_name=name,
-                           next_shift_instances=shift_services.generate_next_shift_instances(),
+                           next_shift_instances=next_shift_instances,
                            previous_shift_instances=previous_shift_instances,
+                           next_shift_instance_forms=next_shift_instance_forms,
                            todays_date=datetime.date.today())
 
 
