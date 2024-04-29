@@ -13,10 +13,13 @@ main = Blueprint("main", __name__, url_prefix="")
 def index():
     session.permanent = True
     name = request.cookies.get("name") or ""
+    page = int(request.args.get("page", default=1, type=int))
+    previous_shift_instances = shift_services.get_previous_shifts(page)
     return render_template("main/index.html",
                            prefilled_name=name,
-                           shift_instances=shift_services.generate_shift_instances(),
-                           load_time=datetime.datetime.now())
+                           next_shift_instances=shift_services.generate_next_shift_instances(),
+                           previous_shift_instances=previous_shift_instances,
+                           todays_date=datetime.date.today())
 
 
 # todo - delete

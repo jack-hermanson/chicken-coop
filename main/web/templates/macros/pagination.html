@@ -1,0 +1,107 @@
+{% macro pagination(pagination_model, endpoint, special_kwargs={}, suffix="") %}
+    {#  suffix is for adding an ID at the end of the URL; caller must include the # symbol  #}
+
+    {% if pagination_model.items %}
+        <div class="container bg-dark mt-3 py-2">
+            <div class="">
+                <p class="text-center small mb-2">Showing {{ pagination_model.first }}
+                    through {{ pagination_model.last }} of {{ pagination_model.total }}.</p>
+            </div>
+            <nav>
+                <ul class="float-start pagination mb-0">
+                    <li class="page-item">
+                        {% if (pagination_model.page - 1) < 1 %}
+                            <a disabled class="disabled page-link disabled">&lt;</a>
+                        {% else %}
+                            <a
+                                href="{{ url_for(
+                                            endpoint,
+                                            page=pagination_model.page - 1,
+                                            **special_kwargs) + (suffix or '') }}"
+                                class="page-link"
+                            >
+                                &lt;
+                            </a>
+                        {% endif %}
+                    </li>
+                </ul>
+                <ul class="float-end pagination mb-0">
+                    <li class="page-item">
+                        {% if (pagination_model.page + 1 > pagination_model.pages) %}
+                            <a class="disabled page-link" disabled>&gt;</a>
+                        {% else %}
+                            <a href="{{ url_for(
+                                            endpoint,
+                                            page=pagination_model.page + 1,
+                                            **special_kwargs) + (suffix or '') }}"
+                               class="page-link">&gt;</a>
+                        {% endif %}
+                    </li>
+                </ul>
+                <ul class="pagination justify-content-center mb-0">
+                    {% for page_num in pagination_model.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                        {% if page_num %}
+                            {% if pagination_model.page == page_num %}
+                                <li class="page-item active">
+                                    <a href="{{ url_for(
+                                                        endpoint,
+                                                        page=page_num,
+                                                        **special_kwargs) + (suffix or '') }}" class="page-link"
+                                    >
+                                        {{ page_num }}
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a href="{{ url_for(
+                                                        endpoint,
+                                                        page=page_num,
+                                                        **special_kwargs) + (suffix or '') }}" class="page-link"
+                                    >
+                                        {{ page_num }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item">
+                                <button type="button" class="page-link" data-bs-toggle="modal"
+                                        data-bs-target="#pagination_modal">...
+                                </button>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+        {##}
+{#        {% block modals %}#}
+            {# pagination #}
+            <div class="modal" tabindex="-1" id="pagination_modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Go to Page</h5>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form action="{{ url_for(endpoint, **special_kwargs) + (suffix or '') }}" method="GET">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="enter_page" class="form-label">Page Number</label>
+                                    <input autofocus="autofocus" name="page" type="number" class="form-control" id="enter_page">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close
+                                </button>
+                                <button type="submit" class="btn btn-outline-success">Go to Page</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+{#        {% endblock modals %}#}
+    {% else %}
+        <p>Nothing!</p>
+    {% endif %}
+
+{% endmacro %}

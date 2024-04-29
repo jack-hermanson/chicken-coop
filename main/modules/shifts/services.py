@@ -15,7 +15,11 @@ def get_future_shift_instances(shift_id):
             .all())
 
 
-def generate_shift_instances():
+def generate_next_shift_instances():
+    """
+    Generate shift instances for the current day and the next 7 days.
+    If they've already been created, then return them.
+    """
     # get all shifts
     shifts = Shift.query.all()
 
@@ -55,3 +59,18 @@ def generate_shift_instances():
 
     shift_instances_to_return.sort(key=lambda si: si.due_date)
     return shift_instances_to_return
+
+
+def get_previous_shifts(page: int):
+    """
+    Get a paginated list of previous shifts in descending order of most recent to least recent.
+    """
+    shift_instances = (
+        ShiftInstance.query
+        .filter(
+            ShiftInstance.due_date < date.today()
+        )
+        .order_by(ShiftInstance.due_date.desc())
+        .paginate(page=page, per_page=10)
+    )
+    return shift_instances
