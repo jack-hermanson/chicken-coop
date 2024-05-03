@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-12">
             {% for shift_instance in next_shift_instances %}
-                {% call simple_card(class="mb-4") %}
+                {% call simple_card(class="mb-4", id=('shift-instance-'+shift_instance.shift_instance_id|string)) %}
                     {{ card_header(shift_instance.due_date.strftime("%A, %b %e") + ": " + shift_instance.shift.time_of_day|time_of_day_str) }}
 
                     {% call card_body(class="py-3") %}
@@ -26,8 +26,9 @@
                         <p class="mb-0">This shift instance has {% if not shift_instance.completed_timestamp %}
                             NOT{% endif %} been completed</p>
                         <div id="shift-instance-form-container-{{ shift_instance.shift_instance_id }}" class="d-none">
-                            <form>
+                            <form action="{{ url_for('main.save_shift_instance') }}" method="POST">
                                 {{ next_shift_instance_forms[loop.index0].csrf_token() }}
+                                {{ next_shift_instance_forms[loop.index0].shift_instance_id() }}
                                 <div class="d-flex mb-3">
                                     {{ form_group(
                                                     next_shift_instance_forms[loop.index0],
@@ -51,9 +52,9 @@
                     {% endcall %}
                     {% call card_footer(class="") %}
                         <div class="d-flex">
-                            <div class="ms-auto">
-                                <p class="mb-0">Test</p>
-                            </div>
+{#                            <div class="ms-auto">#}
+{#                                <p class="mb-0">Test</p>#}
+{#                            </div>#}
                         </div>
                     {% endcall %}
                 {% endcall %}

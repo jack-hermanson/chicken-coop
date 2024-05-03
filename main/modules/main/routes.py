@@ -1,8 +1,8 @@
 import datetime
 
-from flask import Blueprint, render_template, url_for, request, make_response, session
+from flask import Blueprint, render_template, url_for, request, make_response, session, flash, redirect
 from main import logger, db
-from main.modules.shifts.models import Shift
+from main.modules.shifts.models import Shift, ShiftInstance
 from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
 from ..shifts import services as shift_services
 from ..shifts.forms import ShiftInstanceCompletedTimestampForm
@@ -22,6 +22,7 @@ def index():
     next_shift_instance_forms = []
     for shift_instance in next_shift_instances:
         form = ShiftInstanceCompletedTimestampForm()
+        form.shift_instance_id.data = shift_instance.shift_instance_id
         if shift_instance.completed_timestamp:
             form.completed_timestamp.data = shift_instance.completed_timestamp
             form.completed_by.data = shift_instance.completed_by
@@ -33,6 +34,21 @@ def index():
                            previous_shift_instances=previous_shift_instances,
                            next_shift_instance_forms=next_shift_instance_forms,
                            todays_date=datetime.date.today())
+
+
+@main.route("/save-shift-instance", methods=["POST"])
+def save_shift_instance():
+    form = ShiftInstanceCompletedTimestampForm()
+    if form.validate_on_submit():
+        shift_instance = ShiftInstance.query.get_or_404(int(form.shift_instance_id.data))
+        shift_instance.completed_timestamp = form.completed_timestamp.data
+        shift_instance.completed_by = form.completed_by.data
+        db.session.commit()
+        flash("Success", "success")
+        return redirect(url_for("main.index") + f"#shift-instance-{shift_instance.shift_instance_id}")
+    else:
+        flash("Failure", "danger")
+        return redirect(url_for("main.index"))
 
 
 # todo - delete
