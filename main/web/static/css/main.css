@@ -11627,4 +11627,15 @@ table.same-width tbody > tr th {
   z-index: 1050 !important;
 }
 
+span.fake-link {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+span.fake-link:hover, span.fake-link:active {
+  text-decoration-style: solid;
+}
+
 /*# sourceMappingURL=main.css.map */

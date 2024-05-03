@@ -8,3 +8,14 @@ $body-bg-dark: $dark;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 @import "../node_modules/jack-hermanson-css-lib/src/main";
+
+span.fake-link {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  user-select: none;
+  &:hover, &:active {
+    text-decoration-style: solid;
+  }
+}

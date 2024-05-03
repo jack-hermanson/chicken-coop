@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 from sqlalchemy import and_
 
 from main import logger, db
 from utils.date_functions import get_next_date_with_same_day_of_week
 from utils.date_time_enums import DayOfWeekEnum
+from .forms import ShiftInstanceCompletedTimestampForm
 from .models import Shift, ShiftInstance
-from datetime import date
+from datetime import date, datetime, timedelta
+
+from .view_models import ShiftInstanceViewModel
 
 
 def get_future_shift_instances(shift_id):
@@ -74,3 +79,29 @@ def get_previous_shifts(page: int):
         .paginate(page=page, per_page=10)
     )
     return shift_instances
+
+
+def generate_shift_instance_view_model(shift_instance: ShiftInstance, default_name: str) -> ShiftInstanceViewModel:
+    due_date_is_within_editable_range = (
+        # today
+        shift_instance.due_date.date() == datetime.today().date() or
+        (
+            # or yesterday
+            (datetime.today().date() + timedelta(days=-1)) == shift_instance.due_date.date()
+        )
+    )
+    if due_date_is_within_editable_range:
+        form = ShiftInstanceCompletedTimestampForm()
+        form.shift_instance_id.data = shift_instance.shift_instance_id
+        form.completed_by.data = default_name
+        if shift_instance.completed_timestamp:
+            form.completed_timestamp.data = shift_instance.completed_timestamp
+            form.completed_by.data = shift_instance.completed_by
+    else:
+        form = None
+
+    view_model = ShiftInstanceViewModel(
+        shift_instance,
+        form
+    )
+    return view_model

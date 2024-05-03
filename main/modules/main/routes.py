@@ -16,23 +16,20 @@ def index():
     name = request.cookies.get("name") or ""
     page = int(request.args.get("page", default=1, type=int))
 
-    next_shift_instances = shift_services.generate_next_shift_instances()
-    previous_shift_instances = shift_services.get_previous_shifts(page)
-
-    next_shift_instance_forms = []
-    for shift_instance in next_shift_instances:
-        form = ShiftInstanceCompletedTimestampForm()
-        form.shift_instance_id.data = shift_instance.shift_instance_id
-        if shift_instance.completed_timestamp:
-            form.completed_timestamp.data = shift_instance.completed_timestamp
-            form.completed_by.data = shift_instance.completed_by
-        next_shift_instance_forms.append(form)
+    # Create view models for the page
+    next_shift_instances = [
+        shift_services.generate_shift_instance_view_model(shift_instance, name)
+        for shift_instance in shift_services.generate_next_shift_instances()
+    ]
+    previous_shift_instances = [
+        shift_services.generate_shift_instance_view_model(shift_instance, name)
+        for shift_instance in shift_services.get_previous_shifts(page)
+    ]
 
     return render_template("main/index.html",
                            prefilled_name=name,
                            next_shift_instances=next_shift_instances,
                            previous_shift_instances=previous_shift_instances,
-                           next_shift_instance_forms=next_shift_instance_forms,
                            todays_date=datetime.date.today())
 
 
@@ -44,8 +41,11 @@ def save_shift_instance():
         shift_instance.completed_timestamp = form.completed_timestamp.data
         shift_instance.completed_by = form.completed_by.data
         db.session.commit()
+
+        response = make_response(redirect(url_for("main.index")))
+        response.set_cookie("name", form.completed_by.data)
         flash("Success", "success")
-        return redirect(url_for("main.index") + f"#shift-instance-{shift_instance.shift_instance_id}")
+        return response
     else:
         flash("Failure", "danger")
         return redirect(url_for("main.index"))
