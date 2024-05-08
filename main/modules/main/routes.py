@@ -21,16 +21,28 @@ def index():
         shift_services.generate_shift_instance_view_model(shift_instance, name)
         for shift_instance in shift_services.generate_next_shift_instances()
     ]
-    previous_shift_instances = [
-        shift_services.generate_shift_instance_view_model(shift_instance, name)
-        for shift_instance in shift_services.get_previous_shifts(page)
-    ]
+    previous_shift_instances = shift_services.get_previous_shifts(page)
+    for item_index, item in enumerate(previous_shift_instances.items):
+        previous_shift_instances.items[item_index] = shift_services.generate_shift_instance_view_model(item, name)
 
     return render_template("main/index.html",
                            prefilled_name=name,
                            next_shift_instances=next_shift_instances,
                            previous_shift_instances=previous_shift_instances,
                            todays_date=datetime.date.today())
+
+
+@main.route("/undo/<int:shift_instance_id>", methods=["POST"])
+def undo_shift_instance(shift_instance_id: int):
+    pass
+    shift_instance = ShiftInstance.query.get_or_404(shift_instance_id)
+    shift_instance.completed_timestamp = None
+    shift_instance.completed_by = None
+    db.session.commit()
+
+    response = make_response(redirect(url_for("main.index")))
+    flash("Success", "success")
+    return response
 
 
 @main.route("/save-shift-instance", methods=["POST"])
@@ -47,7 +59,7 @@ def save_shift_instance():
         flash("Success", "success")
         return response
     else:
-        flash("Failure", "danger")
+        flash(f"Failure {form.errors}", "danger")
         return redirect(url_for("main.index"))
 
 

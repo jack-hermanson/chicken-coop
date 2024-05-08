@@ -3,122 +3,105 @@
 {% from "macros/card.html" import simple_card, card_body, card_header, card_footer %}
 {% from "macros/pagination.html" import pagination %}
 {% from "macros/form.html" import form_group %}
+{% from "main/partials/shift-instance-partial.html" import shift_instance_partial %}
 
 {% set title = "Shifts" %}
 {% set active_route = "main" %}
 
+{% set hide_title_row = True %}
+
 {% block body %}
-    <div class="row mb-3">
-        <div class="col-12">
-            <p class="lead mb-0">Every day has two shifts—one for the morning and one for the afternoon/evening.</p>
-        </div>
-    </div>
     <div class="row">
-        <div class="col-12">
-            {% for shift_instance_model in next_shift_instances %}
-                {% call simple_card(class="mb-4", id=('shift-instance-'+shift_instance_model.shift_instance.shift_instance_id|string)) %}
-                    {{ card_header(('🌞 ' if shift_instance_model.shift_instance.shift.time_of_day == 1 else '🌚 ') + shift_instance_model.shift_instance.due_date.strftime("%A, %b %e") + ": " +
-                                    shift_instance_model.shift_instance.shift.time_of_day|time_of_day_str) }}
+        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h2 class="border-bottom mb-0">Upcoming Shifts</h2>
+                    <p class="lead mb-0">Every day has two shifts—one for the morning and one for the
+                        afternoon/evening.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {% for shift_instance_model in next_shift_instances %}
 
-                    {% call card_body(class="py-3") %}
-                        <h5>
-                            {% if shift_instance_model.shift_instance.completed_timestamp %}
-                                <span class="me-2">✅</span> Completed {{ shift_instance_model.shift_instance.completed_timestamp.strftime("%a, %b %e at %l:%M%p") }} by {{ shift_instance_model.shift_instance.completed_by }}
-                            {% else %}
-                                <span class="me-2">❌</span>
-                                 Not completed
-                            {% endif %}
-                        </h5>
-
-                        {% if shift_instance_model.shift_instance_completed_timestamp_form %}
-                                <span class="fake-link mt-2 d-inline-block" onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})">
-                                    Toggle Completion Form
-                                </span>
+                        {% if loop.index0 == 2 %}
+                            <p class="d-inline-flex gap-1">
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#next_shifts_collapse">
+                                    Toggle future shifts
+                                </button>
+                            </p>
                         {% endif %}
 
-                        {% if shift_instance_model.shift_instance_completed_timestamp_form %}
-                            <div id="shift-instance-form-container-{{ shift_instance_model.shift_instance.shift_instance_id }}" class="d-none mt-3">
-                                <form action="{{ url_for('main.save_shift_instance') }}" method="POST">
-                                    {{ shift_instance_model.shift_instance_completed_timestamp_form.csrf_token() }}
-                                    {{ shift_instance_model.shift_instance_completed_timestamp_form.shift_instance_id() }}
-                                    <div class="d-flex mb-3">
-                                        {{ form_group(
-                                                        shift_instance_model.shift_instance_completed_timestamp_form,
-                                                        "completed_timestamp",
-                                                        required=True,
-                                                        render_kw={"class": "form-control-sm form-control"},
-                                                        class="me-3"
-                                                    ) }}
-                                        {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, render_kw={"class": "form-control-sm form-control"}) }}
-                                        <div class="mt-auto">
-                                            {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-success mt-auto ms-3") }}
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                        {% if loop.index0 == 2 %}
+                            <div class="collapse" id="next_shifts_collapse">
                         {% endif %}
 
-{#                        {% if todays_date == shift_instance_model.shift_instance.due_date.date() %}#}
-{#                            Due today!#}
-{#                        {% endif %}#}
-{#                        <p class="mb-0">This shift instance has {% if not shift_instance_model.shift_instance.completed_timestamp %}#}
-{#                            NOT{% endif %} been completed</p>#}
+                    {{ shift_instance_partial(shift_instance_model) }}
 
-{#                        {% if shift_instance_model.form %}#}
-{#                            <div>#}
-{#                                <button class="btn btn-sm btn-success"#}
-{#                                        onclick="toggleShiftInstanceForm({{ shift_instance.shift_instance_id }})">Click me#}
-{#                                </button>#}
-{#                            </div>#}
-{#                        {% endif %}#}
-                    {% endcall %}
-                    {% call card_footer(class="") %}
-                        <div class="d-flex">
-{#                            <div class="ms-auto">#}
-{#                                <p class="mb-0">Test</p>#}
-{#                            </div>#}
+                    {% if loop.index0 == loop.length - 1 %}
                         </div>
-                    {% endcall %}
-                {% endcall %}
-            {% endfor %}
+                    {% endif %}
+
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="row mt-lg-0">
+                <div class="col-12">
+                    <h2 class="border-bottom mb-0">Previous Shifts</h2>
+                    <p class="lead">These are shifts that have already passed. They can be edited up to 1 day back.</p>
+                </div>
+            </div>
+            <div class="row" id="previous-shift-instances">
+                <div class="col-12">
+                    {% for shift_instance_model in previous_shift_instances.items %}
+                        {{ shift_instance_partial(shift_instance_model) }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ pagination(previous_shift_instances, "main.index", suffix="#previous-shift-instances") }}
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-12">
-            <h4>Previous Shifts</h4>
-        </div>
-    </div>
+
 
     {#  Previous Shift Instances  #}
-{#    <div class="row" id="previous-shift-instances">#}
-{#        <div class="col-12">#}
-{#            <ul class="list-group">#}
-{#                {% for previous_shift_instance_model in previous_shift_instances.items %}#}
-{#                    <li class="list-group-item d-block">#}
-{#                        <h6>{{ previous_shift_instance.due_date.strftime("%A, %b %e") }}: {{ previous_shift_instance.shift.time_of_day|time_of_day_str }}</h6>#}
-{#                        <p class="mb-0">#}
-{#                            {% if previous_shift_instance.completed_timestamp %}#}
-{#                                Completed by {{ previous_shift_instance.completed_by }} at#}
-{#                                {{ previous_shift_instance.completed_timestamp }}.#}
-{#                            {% else %}#}
-{#                                Not completed.#}
-{#                            {% endif %}#}
-{#                        </p>#}
-{#                    </li>#}
-{#                {% endfor %}#}
-{#            </ul>#}
-{#        </div>#}
-{#    </div>#}
-{#    <div class="row">#}
-{#        <div class="col-12 d-flex justify-content-center">#}
-{#            <div>#}
-{#                {{ pagination(#}
-{#                            endpoint="main.index",#}
-{#                            pagination_model=previous_shift_instances,#}
-{#                            suffix="#previous-shift-instances") }}#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+    {#    <div class="row" id="previous-shift-instances">#}
+    {#        <div class="col-12">#}
+    {#            <ul class="list-group">#}
+    {#                {% for previous_shift_instance_model in previous_shift_instances.items %}#}
+    {#                    <li class="list-group-item d-block">#}
+    {#                        <h6>{{ previous_shift_instance.due_date.strftime("%A, %b %e") }}: {{ previous_shift_instance.shift.time_of_day|time_of_day_str }}</h6>#}
+    {#                        <p class="mb-0">#}
+    {#                            {% if previous_shift_instance.completed_timestamp %}#}
+    {#                                Completed by {{ previous_shift_instance.completed_by }} at#}
+    {#                                {{ previous_shift_instance.completed_timestamp }}.#}
+    {#                            {% else %}#}
+    {#                                Not completed.#}
+    {#                            {% endif %}#}
+    {#                        </p>#}
+    {#                    </li>#}
+    {#                {% endfor %}#}
+    {#            </ul>#}
+    {#        </div>#}
+    {#    </div>#}
+    {#    <div class="row">#}
+    {#        <div class="col-12 d-flex justify-content-center">#}
+    {#            <div>#}
+    {#                {{ pagination(#}
+    {#                            endpoint="main.index",#}
+    {#                            pagination_model=previous_shift_instances,#}
+    {#                            suffix="#previous-shift-instances") }}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
 {% endblock body %}
 
 {% block scripts %}

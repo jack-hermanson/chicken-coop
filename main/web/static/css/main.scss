@@ -4,7 +4,23 @@ $enable-rounded: false;
 $primary: #938462;
 $secondary: #696993;
 $dark: #212838;
-$body-bg-dark: $dark;
+$body-bg-dark: darken($dark, 5%);
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 1380px,
+  xl: 1400px,
+  xxl: 1600px
+);
+$container-max-widths: (
+  sm: 540px,
+  md: 1000px,
+  lg: 1320px,
+  xl: 1390px,
+  xxl: 1560px
+);
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 @import "../node_modules/jack-hermanson-css-lib/src/main";
@@ -18,4 +34,8 @@ span.fake-link {
   &:hover, &:active {
     text-decoration-style: solid;
   }
+}
+
+.card {
+  background-color: $dark;
 }

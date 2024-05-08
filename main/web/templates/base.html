@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <meta name="og:url" content="{{ request.url }}">
-    <meta name="og:title" content="More Chicken Coop | {{ title }}">
+    <meta name="og:title" content="Morey Chicken Coop | {{ title }}">
     <meta name="og:image" content="{{ url_for('static', filename='images/chickens.jpg', _external=True) }}">
     <meta name="og:description" content="This simple application is used to help us keep track of shifts at the Morey Chicken Cooperative">
 
@@ -51,22 +51,24 @@
 {% endwith %}
 
 <div class="container main-container pb-3">
-    <div class="row">
-        <div class="col-12 mb-2">
-            <div class="page-title">
-                <h2 class="border-bottom mb-0">
-                    {% if title %}
-                    {{ text_title if text_title else title }}
-                    {% endif %}
-                </h2>
-                <div class="actions">
-                    {% block actions %}
-                    {% endblock actions %}
+    {% if not hide_title_row %}
+        <div class="row">
+            <div class="col-12 mb-2">
+                <div class="page-title">
+                    <h2 class="border-bottom mb-0">
+                        {% if title %}
+                        {{ text_title if text_title else title }}
+                        {% endif %}
+                    </h2>
+                    <div class="actions">
+                        {% block actions %}
+                        {% endblock actions %}
+                    </div>
                 </div>
+    {#            <hr class="mt-1" />#}
             </div>
-{#            <hr class="mt-1" />#}
         </div>
-    </div>
+    {% endif %}
     {% block body %}
     {% endblock body %}
 </div>
