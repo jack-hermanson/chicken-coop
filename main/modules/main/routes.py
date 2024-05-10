@@ -3,6 +3,7 @@ import datetime
 from flask import Blueprint, render_template, url_for, request, make_response, session, flash, redirect
 from main import logger, db
 from main.modules.shifts.models import Shift, ShiftInstance
+from utils.date_functions import day_of_week_str, time_of_day_str
 from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
 from ..shifts import services as shift_services
 from ..shifts.forms import ShiftInstanceCompletedTimestampForm
@@ -41,7 +42,8 @@ def undo_shift_instance(shift_instance_id: int):
     db.session.commit()
 
     response = make_response(redirect(url_for("main.index")))
-    flash("Success", "success")
+    flash(f"Successfully cleared {day_of_week_str(shift_instance.shift.day_of_week)} "
+          f"{time_of_day_str(shift_instance.shift.time_of_day)}.", "success")
     return response
 
 
@@ -56,10 +58,11 @@ def save_shift_instance():
 
         response = make_response(redirect(url_for("main.index")))
         response.set_cookie("name", form.completed_by.data)
-        flash("Success", "success")
+        flash(f"Successfully updated {day_of_week_str(shift_instance.shift.day_of_week)} "
+              f"{time_of_day_str(shift_instance.shift.time_of_day)}.", "success")
         return response
     else:
-        flash(f"Failure {form.errors}", "danger")
+        flash(f"Failed with errors: {form.errors}", "danger")
         return redirect(url_for("main.index"))
 
 

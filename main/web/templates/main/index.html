@@ -70,38 +70,6 @@
             </div>
         </div>
     </div>
-
-
-    {#  Previous Shift Instances  #}
-    {#    <div class="row" id="previous-shift-instances">#}
-    {#        <div class="col-12">#}
-    {#            <ul class="list-group">#}
-    {#                {% for previous_shift_instance_model in previous_shift_instances.items %}#}
-    {#                    <li class="list-group-item d-block">#}
-    {#                        <h6>{{ previous_shift_instance.due_date.strftime("%A, %b %e") }}: {{ previous_shift_instance.shift.time_of_day|time_of_day_str }}</h6>#}
-    {#                        <p class="mb-0">#}
-    {#                            {% if previous_shift_instance.completed_timestamp %}#}
-    {#                                Completed by {{ previous_shift_instance.completed_by }} at#}
-    {#                                {{ previous_shift_instance.completed_timestamp }}.#}
-    {#                            {% else %}#}
-    {#                                Not completed.#}
-    {#                            {% endif %}#}
-    {#                        </p>#}
-    {#                    </li>#}
-    {#                {% endfor %}#}
-    {#            </ul>#}
-    {#        </div>#}
-    {#    </div>#}
-    {#    <div class="row">#}
-    {#        <div class="col-12 d-flex justify-content-center">#}
-    {#            <div>#}
-    {#                {{ pagination(#}
-    {#                            endpoint="main.index",#}
-    {#                            pagination_model=previous_shift_instances,#}
-    {#                            suffix="#previous-shift-instances") }}#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
 {% endblock body %}
 
 {% block scripts %}

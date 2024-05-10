@@ -8,7 +8,7 @@
                                         shift_instance_model.shift_instance.shift.time_of_day|time_of_day_str) }}
 
         {% call card_body(class="py-3") %}
-            <h5>
+            <h5 class="mb-0">
                 {% if shift_instance_model.shift_instance.completed_timestamp %}
                     <span class="me-2">✅</span> Completed
                     {{ shift_instance_model.shift_instance.completed_timestamp.strftime("%a, %b %e at %l:%M%p") }} by
@@ -21,9 +21,10 @@
 
             {% if shift_instance_model.shift_instance_completed_timestamp_form %}
                 <span class="fake-link mt-2 d-inline-block"
-                      onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})">
-                                        Toggle Completion Form
-                                    </span>
+                      onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})"
+                >
+                    Toggle Completion Form
+                </span>
             {% endif %}
 
             {% if shift_instance_model.shift_instance_completed_timestamp_form %}
@@ -34,12 +35,12 @@
                         {{ shift_instance_model.shift_instance_completed_timestamp_form.shift_instance_id() }}
                         <div class="d-lg-flex mb-3">
                             {{ form_group(
-                                                            shift_instance_model.shift_instance_completed_timestamp_form,
-                                                            "completed_timestamp",
-                                                            required=True,
-                                                            render_kw={"class": "form-control-sm form-control"},
-                                                            class="me-lg-3 mt-2"
-                                                        ) }}
+                                shift_instance_model.shift_instance_completed_timestamp_form,
+                                "completed_timestamp",
+                                required=True,
+                                render_kw={"class": "form-control-sm form-control"},
+                                class="me-lg-3 mt-2"
+                            ) }}
                             {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, class="mt-2", render_kw={"class": "form-control-sm form-control"}) }}
                             <div class="mt-auto pt-3">
                                 {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-success mt-auto ms-lg-3") }}
@@ -50,10 +51,10 @@
                 </div>
             {% endif %}
         {% endcall %}
-        {% call card_footer(class="") %}
-            <div class="d-flex">
-            </div>
-        {% endcall %}
+{#        {% call card_footer(class="") %}#}
+{#            <div class="d-flex">#}
+{#            </div>#}
+{#        {% endcall %}#}
     {% endcall %}
 
 {% endmacro %}
