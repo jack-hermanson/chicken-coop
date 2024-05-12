@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Morey Chicken Coop | {{ title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/jack-hermanson-css-lib/css/main.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -27,8 +28,16 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbar">
-            <ul class="navbar-nav me-auto">
-
+            <ul class="navbar-nav me-auto my-auto pt-1">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Help</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Second Link</a>
+                </li>
             </ul>
         </div>
     </div>

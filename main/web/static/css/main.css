@@ -11642,4 +11642,8 @@ span.fake-link:hover, span.fake-link:active {
   background-color: #212838;
 }
 
+.form-group {
+  margin-bottom: 1em;
+}
+
 /*# sourceMappingURL=main.css.map */

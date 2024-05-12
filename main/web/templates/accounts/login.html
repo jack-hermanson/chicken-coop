@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "macros/form.html" import form_group %}
+
+{% set title = "Log In" %}
+{% set active_route = "accounts" %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            {# I think we don't want the form to explicitly have an action so we can use the next arg #}
+            {# <form action="{{ url_for("accounts.login") }}" method="POST"> #}
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form_group(form, "name", required=True) }}
+                {{ form_group(form, "password", required=True) }}
+
+                <div class="form-group">
+                    <div class="form-check">
+                        {{ form.remember(class="form-check-input") }}
+                        {{ form.remember.label(class="form-check-label") }}
+                    </div>
+                </div>
+
+                <div class="bottom-buttons pb-4 border-bottom">
+                    {{ form.submit(class="btn btn-outline-success") }}
+                    <a href="{{ url_for('accounts.login') }}" class="btn btn-outline-secondary">Reset</a>
+                </div>
+
+                <div class="mt-3">
+                    <p>Or, you can <a href="#">create a new account</a>.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock body %}
