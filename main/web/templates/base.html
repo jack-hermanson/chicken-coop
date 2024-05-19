@@ -31,7 +31,7 @@
             <ul class="navbar-nav me-auto my-auto pt-1 w-100">
                 <li class="nav-item">
                     {% if current_user.is_authenticated and current_user.clearance >= 2 %}
-                        <a href="{{ url_for('admin.index') }}" class="nav-link">Admin</a>
+                        <a href="{{ url_for('admin.index') }}" class="nav-link {% if active_route == 'admin' %}active{% endif %}">Admin</a>
                     {% endif %}
                 </li>
                 <li class="nav-item ms-lg-auto">
