@@ -67,8 +67,7 @@ def create_app(config_class=Config):
     for blueprint in [main, accounts, admin]:
         app.register_blueprint(blueprint)
 
-    # login manager
-    # login_manager.init_app(app)
+    login_manager.init_app(app)
 
     # middleware
     # @app.before_request
