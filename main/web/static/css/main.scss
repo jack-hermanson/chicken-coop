@@ -1,7 +1,7 @@
 $enable-rounded: false;
 
 // https://colors.muz.li/palette/d2b48c/938462/fff9ea/9696d2/696993
-$primary: #938462;
+$primary: darken(#938462, 10%);
 $secondary: #696993;
 $dark: #212838;
 $body-bg-dark: darken($dark, 5%);
@@ -42,4 +42,22 @@ span.fake-link {
 
 .form-group {
   margin-bottom: 1em;
+}
+
+.page-title {
+  display: flex;
+  width: 100%;
+  @extend .border-bottom;
+
+  h2 {
+    margin-bottom: 0;
+    margin-top: 0.5em;
+    display: block;
+  }
+
+  .actions {
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: 0.5em;
+  }
 }

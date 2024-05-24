@@ -53,7 +53,10 @@ class CreateAccountForm(CreateOrEditFormBase):
         if Account.query.filter(func.lower(Account.name) == func.lower(stripped_name)).all():
             raise ValidationError("That name has already been taken.")
 
-class EditAccountForm(CreateOrEditFormBase):
+
+# if we allowed editing name, then CreateOrEditFormBase will be used, until then don't inherit
+# class EditAccountForm(CreateOrEditFormBase):
+class EditAccountForm(FlaskForm):
     password = PasswordField("Password", validators=[password_length])
     confirm_password = PasswordField(
         "Confirm Password",
@@ -61,7 +64,7 @@ class EditAccountForm(CreateOrEditFormBase):
             EqualTo("password", "Your passwords must match.")
         ]
     )
-    submit = SubmitField("Edit Account")
+    submit = SubmitField("Save Changes")
 
     @staticmethod
     def validate_password(_, password):

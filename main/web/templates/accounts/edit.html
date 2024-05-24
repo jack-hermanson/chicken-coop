@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "macros/form.html" import form_group %}
+
+{% set title = "Log In" %}
+{% set active_route = "accounts" %}
+
+{% set page_title = "Edit My Account" %}
+
+{% block actions %}
+    <a class="btn btn-sm btn-primary text-white" href="{{ url_for('accounts.logout') }}">Log Out</a>
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <p>If you need to change your password, you can do that here.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <form action="{{ url_for('accounts.change_password') }}" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form_group(form, "password") }}
+                {{ form_group(form, "confirm_password") }}
+                {{ form.submit(class="btn btn-success") }}
+            </form>
+        </div>
+    </div>
+{% endblock body %}

@@ -37,7 +37,7 @@
                 <li class="nav-item ms-lg-auto">
                     {% if current_user.is_authenticated %}
 {#                        <a href="#" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>#}
-                        <a href="{{ url_for('accounts.logout') }}" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">Log Out</a>
+                        <a href="{{ url_for('accounts.me') }}" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>
                     {% else %}
                         <a href="{{ url_for('accounts.login') }}" class="nav-link">Log In</a>
                     {% endif %}
@@ -68,7 +68,7 @@
         <div class="row">
             <div class="col-12 mb-2">
                 <div class="page-title">
-                    <h2 class="border-bottom mb-0">
+                    <h2 class="mb-0">
                         {% if title %}
                         {{ text_title if text_title else title }}
                         {% endif %}

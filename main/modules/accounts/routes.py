@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from flask_login import logout_user, current_user
+from flask_login import logout_user, current_user, login_required
 
-from main import login_manager
-from main.modules.accounts.forms import LoginForm, CreateAccountForm
+from main import login_manager, bcrypt, db
+from main.modules.accounts.forms import LoginForm, CreateAccountForm, EditAccountForm
 from main.modules.accounts.models import Account
 from . import services
 
@@ -45,4 +45,27 @@ def register():
         flash(f"Account \"{created_account.name}\" registered successfully.", "success")
         return redirect(url_for("accounts.login"))
     return render_template("accounts/register.html",
+                           form=form)
+
+
+@login_required
+@accounts.route("/me")
+def me():
+    form = EditAccountForm()
+
+    return render_template("accounts/edit.html",
+                           form=form)
+
+
+@login_required
+@accounts.route("/change-password", methods=["POST"])
+def change_password():
+    form = EditAccountForm()
+    if form.validate_on_submit():
+        account = Account.query.get_or_404(current_user.account_id)
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        account.password = hashed_password
+        db.session.commit()
+        flash("Password changed successfully.", "success")
+    return render_template("accounts/edit.html",
                            form=form)
