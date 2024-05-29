@@ -8,6 +8,7 @@
                                         shift_instance_model.shift_instance.shift.time_of_day|time_of_day_str) }}
 
         {% call card_body(class="py-3") %}
+
             <h5 class="mb-0">
                 {% if shift_instance_model.shift_instance.completed_timestamp %}
                     <span class="me-2">✅</span> Completed
@@ -18,6 +19,14 @@
                     Not completed
                 {% endif %}
             </h5>
+
+            <p class="my-2">
+                {% if shift_instance_model.shift_instance.shift.assigned_to %}
+                    Person Responsible: <b>{{ shift_instance_model.shift_instance.shift.assigned_to }}</b>
+                {% else %}
+                    <i class="text-muted">Not assigned</i>
+                {% endif %}
+            </p>
 
             {% if shift_instance_model.shift_instance_completed_timestamp_form %}
                 <span class="fake-link mt-2 d-inline-block"

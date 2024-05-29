@@ -67,7 +67,7 @@
     {% if not hide_title_row %}
         <div class="row">
             <div class="col-12 mb-2">
-                <div class="page-title">
+                <div class="page-title {% if title_row_no_border %}no-border-bottom{% endif %}">
                     <h2 class="mb-0">
                         {% if title %}
                         {{ text_title if text_title else title }}

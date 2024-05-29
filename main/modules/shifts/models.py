@@ -13,8 +13,10 @@ class Shift(db.Model):
     time_of_day = db.Column(db.Integer, nullable=False, default=TimeOfDayEnum.MORNING)
 
     # who this is assigned to
-    person_id = db.mapped_column(db.ForeignKey("person.person_id"), nullable=True)
-    person = db.relationship("Person", back_populates="shifts")
+    assigned_to = db.Column(db.String(32), nullable=True)
+    # I had these, but I'm going to cheap out and just use a string
+    # person_id = db.mapped_column(db.ForeignKey("person.person_id"), nullable=True)
+    # person = db.relationship("Person", back_populates="shifts")
 
     shift_instances = db.relationship("ShiftInstance", back_populates="shift", cascade="all, delete-orphan")
 

@@ -1,19 +1,19 @@
-{% macro form_group(form, name, type="text", required=False, class="", render_kw={}) %}
+{% macro form_group(form, name, type="text", required=False, class="", id=None, render_kw={}) %}
 <div class="form-group {{ class }}">
     {% if required %}
-        {{ form[name].label(class="form-label required") }}
+        {{ form[name].label(class="form-label required", for=(id if id else form[name].id)) }}
     {% else %}
-        {{ form[name].label(class="form-label") }}
+        {{ form[name].label(class="form-label", for=(id if id else form[name].id)) }}
     {% endif %}
     {% if form[name].errors %}
-        {{ form[name](class=("form-control is-invalid" if form[name].type != "SelectField" else "form-select form-select-lg is-invalid"), **render_kw) }}
+        {{ form[name](class=("form-control is-invalid" if form[name].type != "SelectField" else "form-select form-select-lg is-invalid"), id=(id if id else form[name].id), **render_kw) }}
         <div class="invalid-feedback">
             {% for error in form[name].errors %}
                 <span>{{ error }}</span>
             {% endfor %}
         </div>
     {% else %}
-        {{ form[name](class=("form-control" if form[name].type != "SelectField" else "form-select form-select-lg"), **render_kw) }}
+        {{ form[name](class=("form-control" if form[name].type != "SelectField" else "form-select form-select-lg"), id=(id if id else form[name].id), **render_kw) }}
     {% endif %}
     {% if form[name].description %}
         <div class="small form-text text-muted mt-2">{{ form[name].description }}</div>

@@ -5,11 +5,11 @@ from sqlalchemy import and_
 from main import logger, db
 from utils.date_functions import get_next_date_with_same_day_of_week
 from utils.date_time_enums import DayOfWeekEnum
-from .forms import ShiftInstanceCompletedTimestampForm
+from .forms import ShiftInstanceCompletedTimestampForm, AssignShiftForm
 from .models import Shift, ShiftInstance
 from datetime import date, datetime, timedelta
 
-from .view_models import ShiftInstanceViewModel
+from .view_models import ShiftInstanceViewModel, AssignShiftViewModel
 
 
 def get_future_shift_instances(shift_id):
@@ -105,3 +105,14 @@ def generate_shift_instance_view_model(shift_instance: ShiftInstance, default_na
         form
     )
     return view_model
+
+
+def generate_assign_shift_view_model(shift: Shift) -> AssignShiftViewModel:
+    assign_shift_view_model = AssignShiftViewModel(
+        shift=shift,
+        assign_shift_form=AssignShiftForm(
+            assigned_to=shift.assigned_to,
+            shift_id=shift.shift_id
+        )
+    )
+    return assign_shift_view_model

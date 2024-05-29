@@ -5,6 +5,7 @@ $primary: darken(#938462, 10%);
 $secondary: #696993;
 $dark: #212838;
 $body-bg-dark: darken($dark, 5%);
+$nav-link-color: lightgray;
 
 $grid-breakpoints: (
   xs: 0,
@@ -47,7 +48,10 @@ span.fake-link {
 .page-title {
   display: flex;
   width: 100%;
-  @extend .border-bottom;
+
+  &:not(.no-border-bottom) {
+    @extend .border-bottom;
+  }
 
   h2 {
     margin-bottom: 0;

@@ -1,0 +1,13 @@
+{% macro tabs() %}
+
+    <ul class="nav nav-tabs" role="tablist">
+        {{ caller() }}
+    </ul>
+
+{% endmacro %}
+
+{% macro tab(name, url, is_active=False) %}
+    <li class="nav-item">
+        <a class="nav-link {% if is_active %} active{% endif %}" aria-current="page" href="{{ url }}" role="tab">{{ name }}</a>
+    </li>
+{% endmacro %}

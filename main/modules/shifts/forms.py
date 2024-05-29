@@ -12,3 +12,12 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
     completed_timestamp = DateTimeLocalField(format='%Y-%m-%dT%H:%M', validators=[Optional()], default=datetime.now)
     completed_by = StringField("Completed By", validators=[])
     submit = SubmitField("Save")
+
+
+class AssignShiftForm(FlaskForm):
+    """
+    Form for assigning shift to a person.
+    """
+    shift_id = HiddenField()
+    assigned_to = StringField()
+    submit = SubmitField("Save")

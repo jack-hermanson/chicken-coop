@@ -2,7 +2,7 @@
 
 {% from "macros/tabs.html" import tab, tabs %}
 
-{% set title = "Admin Dashboard" %}
+{% set title = "Admin Users" %}
 {% set active_route = "admin" %}
 {% set title_row_no_border = True %}
 
@@ -10,15 +10,10 @@
     <div class="row">
         <div class="col mt-1">
             {% call tabs() %}
-                {{ tab(name="Dashboard", url=url_for('admin.index'), is_active=True) }}
+                {{ tab(name="Dashboard", url=url_for('admin.index')) }}
                 {{ tab(name="Shifts", url=url_for('admin.shifts')) }}
-                {{ tab(name="Users", url=url_for('admin.users')) }}
+                {{ tab(name="Users", url=url_for('admin.users'), is_active=True) }}
             {% endcall %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col mt-3">
-            <p>Configure settings for the website.</p>
         </div>
     </div>
 {% endblock body %}
