@@ -22,7 +22,7 @@ class CreateOrEditFormBase(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    name = StringField("Name", validators=[DataRequired(), name_length], render_kw={
+    name = StringField("Name", validators=[DataRequired(), name_length], description="Just your first name, this acts as your username.", render_kw={
         "autofocus": "true",
     })
     password = PasswordField("Password", validators=[DataRequired(), password_length], render_kw={
