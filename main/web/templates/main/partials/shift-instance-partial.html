@@ -52,7 +52,7 @@
                             ) }}
                             {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, class="mt-2 mt-lg-0 mb-0", render_kw={"class": "form-control-sm form-control"}) }}
                             <div class="mt-auto pt-3">
-                                {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-success mt-auto ms-lg-3") }}
+                                {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-primary mt-auto ms-lg-3") }}
                                 <button class="btn btn-danger btn-sm" hx-replace-url="true" hx-target="body" hx-post="{{ url_for('main.undo_shift_instance', shift_instance_id=shift_instance_model.shift_instance.shift_instance_id) }}">Clear</button>
                             </div>
                         </div>
