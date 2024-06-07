@@ -81,7 +81,7 @@ def seed_shifts():
     if db.session.query(Shift).count() != 0:
         return {"status": "already done!"}, 400
 
-    times_of_day = [TimeOfDayEnum.MORNING, TimeOfDayEnum.AFTERNOON]
+    times_of_day = [TimeOfDayEnum.MORNING, TimeOfDayEnum.EVENING]
     days_of_week = [DayOfWeekEnum.MONDAY, DayOfWeekEnum.TUESDAY, DayOfWeekEnum.WEDNESDAY, DayOfWeekEnum.THURSDAY,
                     DayOfWeekEnum.FRIDAY, DayOfWeekEnum.SATURDAY, DayOfWeekEnum.SUNDAY]
 

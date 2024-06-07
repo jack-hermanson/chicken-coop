@@ -154,3 +154,4 @@ node_modules/
 .DS_Store
 main/site.db
 main/web/static/.yarn/install-state.gz
+logs

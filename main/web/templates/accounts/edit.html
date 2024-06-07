@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 {% from "macros/form.html" import form_group %}
 
-{% set title = "Log In" %}
+{% set title = "Edit My Account" %}
 {% set active_route = "accounts" %}
-
-{% set page_title = "Edit My Account" %}
 
 {% block actions %}
     <a class="btn btn-sm btn-primary text-white" href="{{ url_for('accounts.logout') }}">Log Out</a>

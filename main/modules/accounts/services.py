@@ -7,7 +7,7 @@ from sqlalchemy import func
 
 from .forms import CreateAccountForm, LoginForm
 from .models import Account
-from main import bcrypt, db
+from main import bcrypt, db, logger
 
 
 def register(form: CreateAccountForm) -> Account:
@@ -32,5 +32,6 @@ def log_user_in(form: LoginForm):
         return True
     else:
         time.sleep(2)  # prevent spamming
+        logger.warn(f"Incorrect password for {form.name.data}")
         flash("Incorrect username or password.", "danger")
         return False

@@ -38,7 +38,7 @@ def generate_next_shift_instances():
             raise ValueError("Bad shift instance count")
 
         if len(future_shift_instances) == 1:
-            logger.info(f"Relevant shift instance already exists for shift with ID {shift.shift_id}")
+            logger.debug(f"Relevant shift instance already exists for shift with ID {shift.shift_id}")
             continue
 
         if len(future_shift_instances) == 0:

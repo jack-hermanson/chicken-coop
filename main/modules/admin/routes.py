@@ -15,7 +15,7 @@ def index():
 
 @admin.route("/shifts")
 def shifts():
-    raw_shifts_list = Shift.query.all()
+    raw_shifts_list = Shift.query.order_by(Shift.day_of_week, Shift.time_of_day).all()
     shifts_list = [generate_assign_shift_view_model(shift) for shift in raw_shifts_list]
 
     return render_template("admin/shifts.html",
@@ -40,21 +40,7 @@ def save_shift():
         return render_template("admin/partials/admin-shift-partial.html",
                                assign_shift_view_model=generate_assign_shift_view_model(shift),
                                alert_message=alert_message)
-    # todo
 
-    #     shift_instance = Shift.query.get_or_404(int(form.shift_id.data))
-    #     shift_instance.completed_timestamp = form.completed_timestamp.data
-    #     shift_instance.completed_by = form.completed_by.data
-    #     db.session.commit()
-    #
-    #     response = make_response(redirect(url_for("main.index")))
-    #     response.set_cookie("name", form.completed_by.data)
-    #     flash(f"Successfully updated {day_of_week_str(shift_instance.shift.day_of_week)} "
-    #           f"{time_of_day_str(shift_instance.shift.time_of_day)}.", "success")
-    #     return response
-    # else:
-    #     flash(f"Failed with errors: {form.errors}", "danger")
-    #     return redirect(url_for("main.index"))
 
 @admin.route("/users")
 def users():

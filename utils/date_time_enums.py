@@ -3,7 +3,7 @@ from enum import IntEnum
 
 class TimeOfDayEnum(IntEnum):
     MORNING = 1
-    AFTERNOON = 2
+    EVENING = 2
 
 
 # These start at 0 because date.today().weekday() starts at 0 for Monday
