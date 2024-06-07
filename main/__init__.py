@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from logging.handlers import TimedRotatingFileHandler
 
 from flask_bcrypt import Bcrypt
 from flask import Flask, abort
@@ -107,14 +108,23 @@ def create_app(config_class=Config):
 
 
 # Set up logging
+# Set up logging
 logging.basicConfig()
-logger = logging.getLogger("Chores")
+logger = logging.getLogger("chicken-coop")
 logger.propagate = False
 sh = logging.StreamHandler(sys.stdout)
 sh.setFormatter(StreamLogFormatter())
-fh = logging.FileHandler("application.log")
+
+log_dir = "logs"
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
+fh = TimedRotatingFileHandler(os.path.join(log_dir, "logs.txt"), when="midnight", interval=1, backupCount=7)
 fh.setFormatter(FileLogFormatter())
-logger.addHandler(sh)
+fh.suffix += ".txt"
+fh.namer = lambda name: name.replace(".txt", "") + ".txt"
+
 logger.addHandler(fh)
+logger.addHandler(sh)
 logger.setLevel(logging.DEBUG if (
-        os.environ.get('FLASK_ENV') == "dev" or os.environ.get("FLASK_ENV") == "development") else logging.INFO)
+        os.environ.get("FLASK_ENV") == "dev" or os.environ.get("FLASK_ENV") == "development") else logging.INFO)

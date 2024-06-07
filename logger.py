@@ -27,7 +27,17 @@ class StreamLogFormatter(logging.Formatter):
 
 class FileLogFormatter(logging.Formatter):
     # format_string = f"%(levelname)-8s [%(asctime)s]: %(message)s  %(fxilename)s:%(lineno)d %(name)s"
+    format_string = f"%(levelname)-8s [%(asctime)s]: %(message)s - %(filename)s:%(lineno)d "
+
+    FORMATS = {
+        logging.DEBUG: format_string,
+        logging.INFO: format_string,
+        logging.WARNING: format_string,
+        logging.ERROR: format_string,
+        logging.CRITICAL: format_string
+    }
 
     def format(self, record):
-        formatter = logging.Formatter(StreamLogFormatter.format_string)
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt, "%Y-%m-%d %H:%M:%S")
         return formatter.format(record)
