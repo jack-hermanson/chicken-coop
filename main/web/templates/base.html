@@ -30,10 +30,13 @@
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav me-auto my-auto pt-1 w-100">
                 <li class="nav-item">
-                    {% if current_user.is_authenticated and current_user.clearance >= 2 %}
-                        <a href="{{ url_for('admin.index') }}" class="nav-link {% if active_route == 'admin' %}active{% endif %}">Admin</a>
-                    {% endif %}
+                    <a href="{{ url_for('shifts.shift_signup') }}" class="nav-link {% if active_route == 'shifts' %}active{% endif %}">Shift Signup</a>
                 </li>
+                {% if current_user.is_authenticated and current_user.clearance >= 2 %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin.index') }}" class="nav-link {% if active_route == 'admin' %}active{% endif %}">Admin</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item ms-lg-auto">
                     {% if current_user.is_authenticated %}
 {#                        <a href="#" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>#}
@@ -68,9 +71,9 @@
         <div class="row">
             <div class="col-12 mb-2">
                 <div class="page-title {% if title_row_no_border %}no-border-bottom{% endif %}">
-                    <h2 class="mb-0">
+                    <h2 class="my-0">
                         {% if title %}
-                        {{ text_title if text_title else title }}
+                            {{ text_title if text_title else title }}
                         {% endif %}
                     </h2>
                     <div class="actions">

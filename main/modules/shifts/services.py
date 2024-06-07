@@ -26,10 +26,10 @@ def generate_next_shift_instances():
     If they've already been created, then return them.
     """
     # get all shifts
-    shifts = Shift.query.all()
+    raw_shifts = Shift.query.all()
 
     # make sure each shift has instances to mark as complete
-    for shift in shifts:
+    for shift in raw_shifts:
         # there should only be one
         future_shift_instances = get_future_shift_instances(shift.shift_id)
 
@@ -54,7 +54,7 @@ def generate_next_shift_instances():
             db.session.commit()
 
     shift_instances_to_return = []
-    for shift in shifts:
+    for shift in raw_shifts:
         # there should only be one
         future_shift_instances = get_future_shift_instances(shift.shift_id)
         if len(future_shift_instances) != 1:
@@ -107,12 +107,14 @@ def generate_shift_instance_view_model(shift_instance: ShiftInstance, default_na
     return view_model
 
 
-def generate_assign_shift_view_model(shift: Shift) -> AssignShiftViewModel:
+def generate_assign_shift_view_model(shift: Shift, form: AssignShiftForm = None) -> AssignShiftViewModel:
     assign_shift_view_model = AssignShiftViewModel(
         shift=shift,
-        assign_shift_form=AssignShiftForm(
+        assign_shift_form=(form or AssignShiftForm(
             assigned_to=shift.assigned_to,
             shift_id=shift.shift_id
-        )
+        ))
     )
+    if not form:
+        assign_shift_view_model.assign_shift_form.secret_code.data = ""
     return assign_shift_view_model

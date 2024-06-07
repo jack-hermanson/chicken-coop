@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% from "macros/tabs.html" import tab, tabs %}
+{% from "admin/partials/admin-tabs-partial.html" import admin_tabs %}
 
 {% set title = "Admin Dashboard" %}
 {% set active_route = "admin" %}
@@ -9,11 +9,7 @@
 {% block body %}
     <div class="row">
         <div class="col mt-1">
-            {% call tabs() %}
-                {{ tab(name="Dashboard", url=url_for('admin.index'), is_active=True) }}
-                {{ tab(name="Shifts", url=url_for('admin.shifts')) }}
-                {{ tab(name="Users", url=url_for('admin.users')) }}
-            {% endcall %}
+            {{ admin_tabs("Dashboard") }}
         </div>
     </div>
     <div class="row">

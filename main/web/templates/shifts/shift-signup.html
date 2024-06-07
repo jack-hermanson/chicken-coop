@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% from "macros/tabs.html" import tab, tabs %}
+
+{% set title = "Shift Signups" %}
+{% set active_route = "shifts" %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <p class="lead">Sign up for shifts here. To prevent random people or bots from screwing with our data, we have a secret code that must be entered.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% for assign_shift_view_model in shifts_list %}
+                {% include "shifts/partials/shift-signup-partial.html" %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock body %}
