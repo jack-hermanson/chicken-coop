@@ -18,7 +18,7 @@
             {{ assign_shift_view_model.assign_shift_form.shift_id(id="shift-signup-shift-id-" + assign_shift_view_model.shift.shift_id|string) }}
             {{ form_group(assign_shift_view_model.assign_shift_form, "assigned_to", id=("assigned-to-input-" + assign_shift_view_model.shift.shift_id|string)) }}
             {{ form_group(assign_shift_view_model.assign_shift_form, "secret_code", id=("shift-signup-secret-code-shift-id-" + assign_shift_view_model.shift.shift_id|string)) }}
-            {{ assign_shift_view_model.assign_shift_form.submit(class="btn btn-primary") }}
+            {{ assign_shift_view_model.assign_shift_form.submit(class="btn btn-success") }}
         </form>
     {% endcall %}
 {% endcall %}
