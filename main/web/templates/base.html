@@ -42,7 +42,8 @@
 {#                        <a href="#" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>#}
                         <a href="{{ url_for('accounts.me') }}" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>
                     {% else %}
-                        <a href="{{ url_for('accounts.login') }}" class="nav-link">Log In</a>
+                        {# hiding this for now #}
+{#                        <a href="{{ url_for('accounts.login') }}" class="nav-link">Log In</a>#}
                     {% endif %}
                 </li>
             </ul>
