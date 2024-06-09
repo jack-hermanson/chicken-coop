@@ -62,7 +62,7 @@ def generate_next_shift_instances():
             raise ValueError("Bad shift instance count")
         shift_instances_to_return.append(future_shift_instances[0])
 
-    shift_instances_to_return.sort(key=lambda si: si.due_date)
+    shift_instances_to_return.sort(key=lambda si: (si.due_date, si.shift.time_of_day))
     return shift_instances_to_return
 
 

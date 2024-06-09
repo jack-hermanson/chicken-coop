@@ -23,7 +23,7 @@ class AssignShiftForm(FlaskForm):
     """
     shift_id = HiddenField()
     assigned_to = StringField()
-    secret_code = TelField(description="Prevents spam. Same code as the shed and the chicken coop padlock.")
+    secret_code = TelField(description="Prevents spam. Same code as the shed and the chicken coop padlock. Clears out after form is submitted.")
     submit = SubmitField("Save")
 
     @staticmethod

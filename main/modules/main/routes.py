@@ -66,16 +66,6 @@ def save_shift_instance():
         return redirect(url_for("main.index"))
 
 
-# todo - delete
-@main.route("/submit-form", methods=["POST"])
-def test():
-    name = request.form.get("name")
-    response = make_response(render_template("main/index.html",
-                                             prefilled_name=name))
-    response.set_cookie("name", name)
-    return response
-
-
 @main.route("/seed-shifts")
 def seed_shifts():
     if db.session.query(Shift).count() != 0:
