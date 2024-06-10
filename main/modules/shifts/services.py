@@ -72,10 +72,11 @@ def get_previous_shifts(page: int):
     """
     shift_instances = (
         ShiftInstance.query
+        .join(ShiftInstance.shift)
         .filter(
             ShiftInstance.due_date < date.today()
         )
-        .order_by(ShiftInstance.due_date.desc())
+        .order_by(ShiftInstance.due_date.desc(), Shift.time_of_day.desc())
         .paginate(page=page, per_page=10)
     )
     return shift_instances

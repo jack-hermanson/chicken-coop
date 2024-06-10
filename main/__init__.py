@@ -109,7 +109,6 @@ def create_app(config_class=Config):
 
 
 # Set up logging
-# Set up logging
 logging.basicConfig()
 logger = logging.getLogger("chicken-coop")
 logger.propagate = False
