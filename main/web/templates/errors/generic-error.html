@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% set title = "error" %}
+{% set active_route = None %}
+{% set text_title = status|string  + " Error | Something went wrong" %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <p class="blockquote">{{ help_text}}</p>
+            <p class="small text-muted left-line-next-to-text">{{ error }}</p>
+            <button class="btn btn-outline-primary mt-5" onclick="history.back()">&leftarrow; Go Back</button>
+        </div>
+    </div>
+{% endblock body %}

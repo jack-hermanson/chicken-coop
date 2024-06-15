@@ -12,8 +12,8 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
     Form for setting when a shift instance was completed and who completed it.
     """
     shift_instance_id = HiddenField()
-    completed_timestamp = DateTimeLocalField(format='%Y-%m-%dT%H:%M', validators=[Optional()], default=datetime.now)
-    completed_by = StringField("Completed By", validators=[])
+    completed_timestamp = DateTimeLocalField(label="Completed Time", format='%Y-%m-%dT%H:%M', validators=[Optional()], default=datetime.now, description="When was this shift completed?")
+    completed_by = StringField("Completed By", validators=[], description="Who completed this shift?")
     submit = SubmitField("Save")
 
 

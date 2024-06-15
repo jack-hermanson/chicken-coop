@@ -65,8 +65,9 @@ def create_app(config_class=Config):
     from .modules.admin.routes import admin
     from .modules.accounts.routes import accounts
     from .modules.shifts.routes import shifts
+    from .modules.errors.handlers import errors
 
-    for blueprint in [main, accounts, admin, shifts]:
+    for blueprint in [main, accounts, admin, shifts, errors]:
         app.register_blueprint(blueprint)
 
     login_manager.init_app(app)

@@ -21,7 +21,7 @@ def get_next_date_with_same_day_of_week(day_of_week: DayOfWeekEnum, exclude_toda
 
     # if we cannot use today, or today is not the day of the week we want,
     # try adding a certain number of days (1-7) until we get to the desired day
-    logger.debug(f"{int(day_of_week)} - {start.weekday()}")
+    logger.debug(f"day of week: {int(day_of_week)} - start weekday: {start.weekday()} = {day_of_week - start.weekday()}")
     days_ahead = day_of_week - start.weekday()
     if days_ahead <= 0:
         # already happened

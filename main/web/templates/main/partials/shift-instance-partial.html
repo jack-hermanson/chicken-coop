@@ -20,20 +20,31 @@
                 {% endif %}
             </h5>
 
-            <p class="my-2">
+            <p class="mt-2 {% if shift_instance_model.shift_instance_completed_timestamp_form != None %}mb-3{% else %}mb-0{% endif %}">
                 {% if shift_instance_model.shift_instance.shift.assigned_to %}
                     Person Responsible: <b>{{ shift_instance_model.shift_instance.shift.assigned_to }}</b>
                 {% else %}
-                    <i class="text-muted">Not assigned</i>
+                    <i class="text-muted">Not assigned to anyone</i>
                 {% endif %}
             </p>
 
             {% if shift_instance_model.shift_instance_completed_timestamp_form %}
-                <span class="fake-link mt-2 d-inline-block"
-                      onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})"
-                >
-                    Toggle Completion Form
-                </span>
+{#                <span class="fake-link mt-2 d-inline-block"#}
+{#                      onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})"#}
+{#                >#}
+{#                    Toggle Completion Form#}
+{#                </span>#}
+                {% if shift_instance_model.shift_instance.completed_timestamp == None %}
+                    <button class="btn btn-success" onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})">
+                        Complete this shift
+                    </button>
+                    <small class="text-muted d-block mt-2 fst-italic">This shift has not been marked as completed yet. To complete it, tap/click the button, then fill out the form and hit <b>"Save"</b>.</small>
+                {% else %}
+                    <button class="btn btn-primary" onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})">
+                        Edit this shift's completion
+                    </button>
+                    <small class="text-muted d-block mt-2 fst-italic">This shift has already been completed by {{ shift_instance_model.shift_instance.completed_by }}. Click the button to edit that.</small>
+                {% endif %}
             {% endif %}
 
             {% if shift_instance_model.shift_instance_completed_timestamp_form %}
