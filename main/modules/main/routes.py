@@ -7,12 +7,14 @@ from utils.date_functions import day_of_week_str, time_of_day_str
 from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
 from ..shifts import services as shift_services
 from ..shifts.forms import ShiftInstanceCompletedTimestampForm
+from ..shifts.services import generate_alert_for_shifts_that_need_signups
 
 main = Blueprint("main", __name__, url_prefix="")
 
 
 @main.route("/")
 def index():
+    generate_alert_for_shifts_that_need_signups()
     session.permanent = True
     name = request.cookies.get("name") or ""
     page = int(request.args.get("page", default=1, type=int))

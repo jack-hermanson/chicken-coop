@@ -1,7 +1,7 @@
 import time
 
 from flask_wtf import FlaskForm
-from wtforms import DateTimeLocalField, StringField, SubmitField, HiddenField, TelField
+from wtforms import DateTimeLocalField, StringField, SubmitField, HiddenField, TelField, BooleanField
 from wtforms.validators import DataRequired, Optional, ValidationError
 from datetime import datetime
 from main import Config
@@ -23,7 +23,10 @@ class AssignShiftForm(FlaskForm):
     """
     shift_id = HiddenField()
     assigned_to = StringField()
-    secret_code = TelField(description="Prevents spam. Same code as the shed and the chicken coop padlock. Clears out after form is submitted.")
+    secret_code = TelField(description="Prevents spam. Same code as the shed and the chicken coop padlock. Clears out "
+                                       "after form is submitted.")
+    seeking_replacement = BooleanField("Seeking Replacement", description="If checked, this shift is \"up for grabs\" "
+                                                                          "for anyone willing to take it.")
     submit = SubmitField("Save")
 
     @staticmethod

@@ -3,7 +3,7 @@
 
 {% macro shift_instance_partial(shift_instance_model) %}
 
-    {% call simple_card(class="mb-4", id=('shift-instance-'+shift_instance_model.shift_instance.shift_instance_id|string)) %}
+    {% call simple_card(class=("mb-4" + (" border-warning" if shift_instance_model.shift_instance.shift.seeking_replacement or not shift_instance_model.shift_instance.shift.assigned_to else "")), id=('shift-instance-'+shift_instance_model.shift_instance.shift_instance_id|string)) %}
         {{ card_header(('🌞 ' if shift_instance_model.shift_instance.shift.time_of_day == 1 else '🌚 ') + shift_instance_model.shift_instance.due_date.strftime("%A, %b %e") + ": " +
                                         shift_instance_model.shift_instance.shift.time_of_day|time_of_day_str) }}
 
@@ -53,7 +53,7 @@
                     <form action="{{ url_for('main.save_shift_instance') }}" method="POST">
                         {{ shift_instance_model.shift_instance_completed_timestamp_form.csrf_token() }}
                         {{ shift_instance_model.shift_instance_completed_timestamp_form.shift_instance_id() }}
-                        <div class="d-lg-flex mb-3">
+                        <div class="mb-3">
                             {{ form_group(
                                 shift_instance_model.shift_instance_completed_timestamp_form,
                                 "completed_timestamp",
@@ -61,13 +61,19 @@
                                 render_kw={"class": "form-control-sm form-control"},
                                 class="me-lg-3 mb-0"
                             ) }}
-                            {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, class="mt-2 mt-lg-0 mb-0", render_kw={"class": "form-control-sm form-control"}) }}
+                            {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, class="mt-2 mb-0", render_kw={"class": "form-control-sm form-control"}) }}
                             <div class="mt-auto pt-3">
-                                {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-success mt-auto ms-lg-3") }}
+                                {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-success mt-auto") }}
                                 <button class="btn btn-danger btn-sm" hx-replace-url="true" hx-target="body" hx-post="{{ url_for('main.undo_shift_instance', shift_instance_id=shift_instance_model.shift_instance.shift_instance_id) }}">Clear</button>
                             </div>
                         </div>
                     </form>
+                </div>
+            {% endif %}
+
+            {% if shift_instance_model.shift_instance.shift.seeking_replacement or not shift_instance_model.shift_instance.shift.assigned_to %}
+            	<div class="alert alert-warning mt-3 mb-0">
+                    This shift needs a volunteer. <a class="alert-link" href="{{ url_for('shifts.shift_signup') }}#shift-{{ shift_instance_model.shift_instance.shift.shift_id }}">Click here</a> to view the shift signup form.
                 </div>
             {% endif %}
         {% endcall %}

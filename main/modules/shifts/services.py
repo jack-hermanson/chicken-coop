@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from sqlalchemy import and_
+from flask import flash
+from sqlalchemy import and_, or_
 
 from main import logger, db
-from utils.date_functions import get_next_date_with_same_day_of_week
+from utils.date_functions import get_next_date_with_same_day_of_week, day_of_week_str, time_of_day_str
 from utils.date_time_enums import DayOfWeekEnum
 from .forms import ShiftInstanceCompletedTimestampForm, AssignShiftForm
 from .models import Shift, ShiftInstance
@@ -113,9 +114,35 @@ def generate_assign_shift_view_model(shift: Shift, form: AssignShiftForm = None)
         shift=shift,
         assign_shift_form=(form or AssignShiftForm(
             assigned_to=shift.assigned_to,
-            shift_id=shift.shift_id
+            shift_id=shift.shift_id,
+            seeking_replacement=shift.seeking_replacement
         ))
     )
     if not form:
         assign_shift_view_model.assign_shift_form.secret_code.data = ""
     return assign_shift_view_model
+
+
+def get_shifts_that_need_signups():
+    """Get all the shifts that have 'seeking_replacement' or no assignment at all."""
+    shifts_that_need_signups = Shift.query.filter(
+        or_(
+            Shift.seeking_replacement,
+            Shift.assigned_to.is_(None)
+        )
+    ).order_by(Shift.day_of_week, Shift.time_of_day).all()
+    return shifts_that_need_signups
+
+
+def generate_alert_for_shifts_that_need_signups():
+    """Generate the alert saying these shifts need signups."""
+    shifts_that_need_signups = get_shifts_that_need_signups()
+    if len(shifts_that_need_signups):
+        logger.info(f"There are {len(shifts_that_need_signups)} shifts that need signups")
+        message = "The following shifts are looking for volunteers: "
+        for index, shift in enumerate(shifts_that_need_signups):
+            message += f"{day_of_week_str(shift.day_of_week)} {time_of_day_str(shift.time_of_day)}"
+            if index < len(shifts_that_need_signups) - 1:
+                message += ", "
+        message += "."
+        flash(message, "warning")

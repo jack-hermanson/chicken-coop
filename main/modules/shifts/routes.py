@@ -31,6 +31,8 @@ def sign_up():
             shift.assigned_to = form.assigned_to.data
             alert_message = f"Successfully assigned shift to {shift.assigned_to}.", "success"
 
+        shift.seeking_replacement = form.seeking_replacement.data
+
         db.session.commit()
 
         assign_shift_view_model = generate_assign_shift_view_model(shift)
