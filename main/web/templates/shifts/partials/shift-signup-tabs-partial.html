@@ -1,0 +1,9 @@
+{% from "macros/tabs.html" import tab, tabs %}
+
+
+{% macro shift_signup_tabs(active_tab) %}
+    {% call tabs() %}
+        {{ tab(name="Recurring Shift Signup", url=url_for("shifts.recurring_shift_signup"), is_active=(active_tab == 1)) }}
+        {{ tab(name="Specific Shift Signup", url=url_for("shifts.specific_shift_signup"), is_active=(active_tab == 2)) }}
+    {% endcall %}
+{% endmacro %}

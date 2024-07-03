@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% from "macros/card.html" import simple_card, card_header, card_body %}
+{% from "shifts/partials/shift-signup-tabs-partial.html" import shift_signup_tabs %}
+
+
+{% set title = "Shift Signups" %}
+{% set active_route = "shifts" %}
+{% set title_row_no_border = True %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            {{ shift_signup_tabs(1) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {#            <p class="lead mt-2">Sign up for shifts here. To prevent random people or bots from screwing with our data, we have a secret code that must be entered.</p>#}
+            {#            <div class="p-3 mt-3 mb-4 rounded-2" style="border: 1px solid white;">#}
+            {#                <p class="lead fw-bold">To mark your shift as completed, please navigate to the <a href="{{ url_for('main.index') }}">Home</a> page.</p>#}
+            {#                <p class="mb-0">This page is just for signing up for shifts.</p>#}
+            {#            </div>#}
+            <p class="mt-2 lead">On this tab, sign up for recurring shifts.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% call simple_card(class="mb-3") %}
+                {{ card_header("Jump to Shift") }}
+                {% call card_body() %}
+                    <ol class="mb-0 fs-5 lh-lg">
+                        {% for assign_shift_view_model in shifts_list %}
+                            <li>
+                                <a href="#shift-{{ assign_shift_view_model.shift.shift_id|string }}"> {{ assign_shift_view_model.shift.day_of_week|day_of_week_str }} {{ assign_shift_view_model.shift.time_of_day|time_of_day_str }}</a>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                {% endcall %}
+            {% endcall %}
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% for assign_shift_view_model in shifts_list %}
+                {% include "shifts/partials/recurring-shift-signup-partial.html" %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock body %}

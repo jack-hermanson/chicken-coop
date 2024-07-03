@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% from "shifts/partials/shift-signup-tabs-partial.html" import shift_signup_tabs %}
+
+
+{% set title = "Shift Signups" %}
+{% set active_route = "shifts" %}
+{% set title_row_no_border = True %}
+
+{% block body %}
+	<div class="row">
+        <div class="col">
+            {{ shift_signup_tabs(2) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p class="mt-2 lead">On this tab, make plans for specific dates.</p>
+        </div>
+    </div>
+{% endblock %}

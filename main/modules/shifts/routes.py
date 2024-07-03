@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 
 from main import db
 from main.modules.shifts.forms import AssignShiftForm
@@ -9,11 +9,16 @@ shifts = Blueprint("shifts", __name__, url_prefix="/shifts")
 
 
 @shifts.route("/")
-def shift_signup():
+def index_redirect():
+    return redirect(url_for("shifts.recurring_shift_signup"), 301)
+
+
+@shifts.route("/recurring")
+def recurring_shift_signup():
     raw_shifts_list = Shift.query.order_by(Shift.day_of_week, Shift.time_of_day).all()
     shifts_list = [generate_assign_shift_view_model(shift) for shift in raw_shifts_list]
 
-    return render_template("shifts/shift-signup.html",
+    return render_template("shifts/recurring-shift-signup.html",
                            shifts_list=shifts_list)
 
 
@@ -37,11 +42,14 @@ def sign_up():
 
         assign_shift_view_model = generate_assign_shift_view_model(shift)
 
-        return render_template("shifts/partials/shift-signup-partial.html",
+        return render_template("shifts/partials/recurring-shift-signup-partial.html",
                                assign_shift_view_model=assign_shift_view_model,
                                alert_message=alert_message)
     else:
-        return render_template("shifts/partials/shift-signup-partial.html",
+        return render_template("shifts/partials/recurring-shift-signup-partial.html",
                                assign_shift_view_model=generate_assign_shift_view_model(shift, form))
 
 
+@shifts.route("/specific")
+def specific_shift_signup():
+    return render_template("shifts/specific-shift-signup.html")

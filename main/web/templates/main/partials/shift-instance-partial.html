@@ -73,7 +73,7 @@
 
             {% if shift_instance_model.shift_instance.shift.seeking_replacement or not shift_instance_model.shift_instance.shift.assigned_to %}
             	<div class="alert alert-warning mt-3 mb-0">
-                    This shift needs a volunteer. <a class="alert-link" href="{{ url_for('shifts.shift_signup') }}#shift-{{ shift_instance_model.shift_instance.shift.shift_id }}">Click here</a> to view the shift signup form.
+                    This shift needs a volunteer. <a class="alert-link" href="{{ url_for('shifts.recurring_shift_signup') }}#shift-{{ shift_instance_model.shift_instance.shift.shift_id }}">Click here</a> to view the shift signup form.
                 </div>
             {% endif %}
         {% endcall %}
