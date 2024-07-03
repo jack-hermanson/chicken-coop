@@ -33,7 +33,7 @@
                 <div class="small form-text text-muted mt-2">{{ assign_shift_view_model.assign_shift_form.seeking_replacement.description }}</div>
             </div>
 
-            {{ form_group(assign_shift_view_model.assign_shift_form, "secret_code", id=("shift-signup-secret-code-shift-id-" + assign_shift_view_model.shift.shift_id|string)) }}
+{#            {{ form_group(assign_shift_view_model.assign_shift_form, "secret_code", id=("shift-signup-secret-code-shift-id-" + assign_shift_view_model.shift.shift_id|string)) }}#}
             {{ assign_shift_view_model.assign_shift_form.submit(class="btn btn-success") }}
         </form>
     {% endcall %}

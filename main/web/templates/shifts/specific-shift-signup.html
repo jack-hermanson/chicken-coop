@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% from "shifts/partials/shift-signup-tabs-partial.html" import shift_signup_tabs %}
+{% from "macros/form.html" import form_group %}
+{% from "macros/card.html" import simple_card, card_body, card_header %}
+{% from "shifts/partials/specific-shift-signup-partial.html" import specific_shift_instance_signup %}
 
 
 {% set title = "Shift Signups" %}
@@ -8,7 +11,7 @@
 {% set title_row_no_border = True %}
 
 {% block body %}
-	<div class="row">
+    <div class="row">
         <div class="col">
             {{ shift_signup_tabs(2) }}
         </div>
@@ -16,6 +19,39 @@
     <div class="row">
         <div class="col">
             <p class="mt-2 lead">On this tab, make plans for specific dates.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% call simple_card() %}
+                {{ card_header("Add New") }}
+                {% call card_body() %}
+                    <form action="">
+                        <div class="form-group">
+                            <label for="date-0" class="form-label required">{{ form.date.label }}</label>
+                            {{ form.date(class="form-control", id="date-0") }}
+                        </div>
+                        {{ form_group(form, "time_of_day", required=True) }}
+                        {{ form_group(form, "assigned_to", required=True) }}
+                        <div class="bottom-buttons">
+                            {{ form.submit(class="btn btn-success") }}
+                        </div>
+                    </form>
+                {% endcall %}
+            {% endcall %}
+            <div style="text-align: center; white-space: nowrap; overflow: hidden;" class="my-3">
+                <span style="display: inline-block; width: 100%; font-size: 1.2rem; letter-spacing: 5px;">
+                    {% for i in range(50) %}🐔{% endfor %}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% for specific_shift_instance_assignment in specific_shift_instance_assignments %}
+                {{ specific_shift_instance_signup(specific_shift_instance_assignment) }}
+            {% endfor %}
+
         </div>
     </div>
 {% endblock %}

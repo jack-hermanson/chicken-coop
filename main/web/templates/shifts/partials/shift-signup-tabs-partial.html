@@ -3,7 +3,7 @@
 
 {% macro shift_signup_tabs(active_tab) %}
     {% call tabs() %}
-        {{ tab(name="Recurring Shift Signup", url=url_for("shifts.recurring_shift_signup"), is_active=(active_tab == 1)) }}
-        {{ tab(name="Specific Shift Signup", url=url_for("shifts.specific_shift_signup"), is_active=(active_tab == 2)) }}
+        {{ tab(name="Recurring Shifts", url=url_for("shifts.recurring_shift_signup"), is_active=(active_tab == 1)) }}
+        {{ tab(name="Specific Dates", url=url_for("shifts.specific_shift_signup"), is_active=(active_tab == 2)) }}
     {% endcall %}
 {% endmacro %}

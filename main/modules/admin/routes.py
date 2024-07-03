@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, abort
 from flask_login import login_required, current_user
 
 from ..accounts.ClearanceEnum import ClearanceEnum
-from ..shifts.forms import AssignShiftForm
+from ..shifts.forms import AssignRecurringShiftForm
 from ..shifts.models import Shift
 from ..shifts.services import generate_assign_shift_view_model
 from ... import db

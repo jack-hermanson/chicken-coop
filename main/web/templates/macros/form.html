@@ -6,14 +6,14 @@
         {{ form[name].label(class="form-label", for=(id if id else form[name].id)) }}
     {% endif %}
     {% if form[name].errors %}
-        {{ form[name](class=("form-control is-invalid" if form[name].type != "SelectField" else "form-select form-select-lg is-invalid"), id=(id if id else form[name].id), **render_kw) }}
+        {{ form[name](class=("form-control is-invalid" if form[name].type != "SelectField" else "form-select is-invalid"), id=(id if id else form[name].id), **render_kw) }}
         <div class="invalid-feedback">
             {% for error in form[name].errors %}
                 <span>{{ error }}</span>
             {% endfor %}
         </div>
     {% else %}
-        {{ form[name](class=("form-control" if form[name].type != "SelectField" else "form-select form-select-lg"), id=(id if id else form[name].id), **render_kw) }}
+        {{ form[name](class=("form-control" if form[name].type != "SelectField" else "form-select"), id=(id if id else form[name].id), **render_kw) }}
     {% endif %}
     {% if form[name].description %}
         <div class="small form-text text-muted mt-2">{{ form[name].description }}</div>

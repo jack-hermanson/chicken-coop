@@ -1,9 +1,13 @@
+import datetime
+
 from flask import Blueprint, render_template, redirect, url_for
 
 from main import db
-from main.modules.shifts.forms import AssignShiftForm
+from main.modules.shifts.forms import AssignRecurringShiftForm, AssignSpecificShiftForm
 from main.modules.shifts.models import Shift
-from main.modules.shifts.services import generate_assign_shift_view_model
+from main.modules.shifts.services import generate_assign_shift_view_model, assign_specific_shift, \
+    get_specific_shift_instance_assignments
+from utils.date_time_enums import TimeOfDayEnum
 
 shifts = Blueprint("shifts", __name__, url_prefix="/shifts")
 
@@ -24,7 +28,7 @@ def recurring_shift_signup():
 
 @shifts.route("/sign-up", methods=["POST"])
 def sign_up():
-    form = AssignShiftForm()
+    form = AssignRecurringShiftForm()
     shift = Shift.query.get_or_404(form.shift_id.data)
 
     if form.validate_on_submit():
@@ -52,4 +56,17 @@ def sign_up():
 
 @shifts.route("/specific")
 def specific_shift_signup():
-    return render_template("shifts/specific-shift-signup.html")
+    form = AssignSpecificShiftForm()
+    specific_shift_instance_assignments = get_specific_shift_instance_assignments()
+    return render_template("shifts/specific-shift-signup.html",
+                           form=form,
+                           specific_shift_instance_assignments=specific_shift_instance_assignments)
+
+
+@shifts.route("/test")
+def test():
+    form = AssignSpecificShiftForm()
+    form.date.data = datetime.date.today() + datetime.timedelta(days=2)
+    form.assigned_to.data = "Jacksonian"
+    form.time_of_day.data = int(TimeOfDayEnum.MORNING)
+    return assign_specific_shift(form)
