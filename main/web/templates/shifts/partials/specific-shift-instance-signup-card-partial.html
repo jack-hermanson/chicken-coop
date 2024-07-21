@@ -1,6 +1,8 @@
 {% from "macros/card.html" import simple_card, card_header, card_body %}
 {% from "macros/form.html" import form_group %}
 
+{# Not really a signup card anymore, this is so sloppy. It works though. Don't think too much. #}
+
 {% call simple_card(class="mb-4", id=("instance-" + (specific_shift_instance_assignment.specific_shift_instance_assignment_id|string) )) %}
     {{ card_header((specific_shift_instance_assignment.instance_date.strftime("%A, %D") + " " + specific_shift_instance_assignment.time_of_day|time_of_day_str)) }}
     {% call card_body() %}
