@@ -4,7 +4,8 @@
 {% call simple_card(class="mb-4", id=("instance-" + (specific_shift_instance_assignment.specific_shift_instance_assignment_id|string) )) %}
     {{ card_header((specific_shift_instance_assignment.instance_date.strftime("%A, %D") + " " + specific_shift_instance_assignment.time_of_day|time_of_day_str)) }}
     {% call card_body() %}
-        {{ specific_shift_instance_assignment.specific_shift_instance_assignment_id }}
-        {{ specific_shift_instance_assignment.instance_assigned_to }}
+        Covered by: <b>{{ specific_shift_instance_assignment.instance_assigned_to }}</b>
+{#        {{ specific_shift_instance_assignment.specific_shift_instance_assignment_id }}#}
+{#        {{ specific_shift_instance_assignment.instance_assigned_to }}#}
     {% endcall %}
 {% endcall %}
