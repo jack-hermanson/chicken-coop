@@ -17,7 +17,7 @@ def get_next_date_with_same_day_of_week(day_of_week: DayOfWeekEnum, exclude_toda
     if (not exclude_today) and start.weekday() == day_of_week:
         # today is the day of the week we're looking for, and that's allowed
         # so go ahead and return it.
-        return start + timedelta(days=offset_days)
+        return (start + timedelta(days=offset_days)).date()
 
     # if we cannot use today, or today is not the day of the week we want,
     # try adding a certain number of days (1-7) until we get to the desired day
