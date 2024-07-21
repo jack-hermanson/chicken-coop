@@ -11,7 +11,8 @@
     <meta name="og:url" content="{{ request.url }}">
     <meta name="og:title" content="Morey Chicken Coop | {{ title }}">
     <meta name="og:image" content="{{ url_for('static', filename='images/chickens-walking.jpg', _external=True) }}">
-    <meta name="og:description" content="This simple application is used to help us keep track of shifts at the Morey Chicken Cooperative">
+    <meta name="og:description"
+          content="This simple application is used to help us keep track of shifts at the Morey Chicken Cooperative">
 
     <script src="{{ url_for("static", filename="node_modules/htmx.org/dist/htmx.min.js") }}"></script>
 </head>
@@ -21,7 +22,12 @@
         <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex">
             <img alt="logo" src="{{ url_for("static", filename="logo-transparent.png") }}" height="42"
                  class="d-inline-block align-text-top logo">
-            <span class="d-inline-block my-auto pt-1 ms-2">Morey Chicken Coop{% if environment != "production" %} <span style="font-family: monospace; color: #fff; text-shadow: #222 0px 0px 5px, #ffaaff 0px 0px 10px, #ffaaff 0px 0px 15px; margin-left: 10px;">{{'{ '}}env: {{ environment }};{{' }'}}</span>{% endif %}</span>
+            <span class="d-inline-flex align-items-center my-auto pt-1 ms-2">
+                <span>
+                    Morey Chicken Coop
+                </span>
+                {% if environment != "production" %}<span class="d-flex my-auto pt-1" style="font-family: monospace; color: #fff; text-shadow: #222 0px 0px 5px, #ffaaff 0px 0px 10px, #ffaaff 0px 0px 15px; margin-left: 5px; font-size: 12px;">{{' {'}}{{ environment }}{{'}'}}</span>{% endif %}
+            </span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
             <span class="navbar-toggler-icon"></span>
@@ -30,23 +36,27 @@
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav me-auto my-auto pt-1 w-100">
                 <li class="nav-item">
-                    <a href="{{ url_for('main.index') }}" class="nav-link {% if active_route == 'main' %}active{% endif %}">Home</a>
+                    <a href="{{ url_for('main.index') }}"
+                       class="nav-link {% if active_route == 'main' %}active{% endif %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url_for('shifts.recurring_shift_signup') }}" class="nav-link {% if active_route == 'shifts' %}active{% endif %}">Shift Signup</a>
+                    <a href="{{ url_for('shifts.recurring_shift_signup') }}"
+                       class="nav-link {% if active_route == 'shifts' %}active{% endif %}">Shift Signup</a>
                 </li>
                 {% if current_user.is_authenticated and current_user.clearance >= 2 %}
                     <li class="nav-item">
-                        <a href="{{ url_for('admin.index') }}" class="nav-link {% if active_route == 'admin' %}active{% endif %}">Admin</a>
+                        <a href="{{ url_for('admin.index') }}"
+                           class="nav-link {% if active_route == 'admin' %}active{% endif %}">Admin</a>
                     </li>
                 {% endif %}
                 <li class="nav-item ms-lg-auto">
                     {% if current_user.is_authenticated %}
-{#                        <a href="#" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>#}
-                        <a href="{{ url_for('accounts.me') }}" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>
+                        {#                        <a href="#" class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>#}
+                        <a href="{{ url_for('accounts.me') }}"
+                           class="nav-link {% if active_route == 'accounts' %}active{% endif %}">{{ current_user.name }}</a>
                     {% else %}
                         {# hiding this for now #}
-{#                        <a href="{{ url_for('accounts.login') }}" class="nav-link">Log In</a>#}
+                        {#                        <a href="{{ url_for('accounts.login') }}" class="nav-link">Log In</a>#}
                     {% endif %}
                 </li>
             </ul>
@@ -72,14 +82,15 @@
 
 {% if environment != "production" %}
     <div class="container mt-3">
-                <div class="alert alert-danger">
-                    <div class="row">
-                        <div class="col-12">
-                            <p class="mb-0">Application is running in the <code>{{ environment }}</code> environment. Not the real thing.</p>
-                        </div>
-                    </div>
+        <div class="alert alert-danger">
+            <div class="row">
+                <div class="col-12">
+                    <p class="mb-0">Application is running in the <code>{{ environment }}</code> environment. Not the
+                        real thing.</p>
                 </div>
+            </div>
         </div>
+    </div>
 {% endif %}
 
 <div class="container main-container pb-3">
@@ -97,7 +108,7 @@
                         {% endblock actions %}
                     </div>
                 </div>
-    {#            <hr class="mt-1" />#}
+                {#            <hr class="mt-1" />#}
             </div>
         </div>
     {% endif %}
