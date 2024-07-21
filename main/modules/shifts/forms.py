@@ -44,8 +44,10 @@ class AssignSpecificShiftForm(FlaskForm):
     """
     Form for assigning a specific date for a shift to someone.
     """
+    specific_shift_instance_assignment_id = HiddenField()  # for editing
     date = DateField(
         format='%Y-%m-%d',
+        default=datetime.now,
         validators=[
             DataRequired()
         ],

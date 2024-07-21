@@ -29,7 +29,7 @@
             {% call simple_card(class="mb-3") %}
                 {{ card_header("Jump to Shift") }}
                 {% call card_body() %}
-                    <ol class="mb-0 fs-5 lh-lg">
+                    <ol class="mb-0 fs-5 lh-lg ps-4">
                         {% for assign_shift_view_model in shifts_list %}
                             <li>
                                 <a href="#shift-{{ assign_shift_view_model.shift.shift_id|string }}"> {{ assign_shift_view_model.shift.day_of_week|day_of_week_str }} {{ assign_shift_view_model.shift.time_of_day|time_of_day_str }}</a>

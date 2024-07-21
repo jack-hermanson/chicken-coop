@@ -1,0 +1,32 @@
+{% from "macros/form.html" import form_group %}
+
+{# WRAP FORM AROUND THIS ABOVE IT TO SPECIFY HTMX ATTRS #}
+{% macro specific_shift_instance_signup_form_body(form) %}
+    {{ form.specific_shift_instance_assignment_id() }}
+    <div class="form-group">
+        <label for="date-0" class="form-label required">{{ form.date.label }}</label>
+        {{ form.date(class="form-control", id="date-0") }}
+    </div>
+    {{ form_group(form, "time_of_day", required=True) }}
+    {{ form_group(form, "assigned_to", required=True) }}
+    <div class="bottom-buttons">
+        {{ form.submit(class="btn btn-success") }}
+    </div>
+{% endmacro %}
+
+{#
+
+Form needs to be generic enough to work on create and update.
+The behavior is very different for each though.
+
+On create:
+ - hx-post to create endpoint
+ - hx-target the list "#specific-shifts-instance-assignments-list"
+ - hx-swap "afterbegin"
+
+On edit:
+ - hx-put(?) to edit endpoint
+ - hx-target the card
+ - hx-swap "outerHTML"
+
+#}

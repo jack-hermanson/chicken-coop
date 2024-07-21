@@ -3,7 +3,7 @@
 {% from "shifts/partials/shift-signup-tabs-partial.html" import shift_signup_tabs %}
 {% from "macros/form.html" import form_group %}
 {% from "macros/card.html" import simple_card, card_body, card_header %}
-{% from "shifts/partials/specific-shift-signup-partial.html" import specific_shift_instance_signup %}
+{% from "shifts/partials/specific-shift-instance-signup-form-body-partial.html" import specific_shift_instance_signup_form_body %}
 
 
 {% set title = "Shift Signups" %}
@@ -24,18 +24,16 @@
     <div class="row">
         <div class="col">
             {% call simple_card() %}
-                {{ card_header("Add New") }}
+                {{ card_header("Sign Up for a Specific Shift") }}
                 {% call card_body() %}
-                    <form action="">
-                        <div class="form-group">
-                            <label for="date-0" class="form-label required">{{ form.date.label }}</label>
-                            {{ form.date(class="form-control", id="date-0") }}
-                        </div>
-                        {{ form_group(form, "time_of_day", required=True) }}
-                        {{ form_group(form, "assigned_to", required=True) }}
-                        <div class="bottom-buttons">
-                            {{ form.submit(class="btn btn-success") }}
-                        </div>
+                    <form
+                        hx-post="{{ url_for('shifts.specific_shift_signup_create_update') }}"
+                        hx-target="#specific-shifts-instance-assignments-list"
+                        hx-swap="innerHTML"
+                        hx-on::after-request="if(event.detail.successful) this.reset()"
+                    >
+                        {{ form.csrf_token(id="specific-shift-signup-create-csrf") }}
+                        {{ specific_shift_instance_signup_form_body(form) }}
                     </form>
                 {% endcall %}
             {% endcall %}
@@ -47,11 +45,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
-            {% for specific_shift_instance_assignment in specific_shift_instance_assignments %}
-                {{ specific_shift_instance_signup(specific_shift_instance_assignment) }}
-            {% endfor %}
-
+        <div class="col" id="specific-shifts-instance-assignments-list">
+            {% include "shifts/partials/specific-shift-instance-signup-list-partial.html" %}
         </div>
     </div>
 {% endblock %}

@@ -70,6 +70,18 @@
     {% endif %}
 {% endwith %}
 
+{% if environment != "production" %}
+    <div class="container mt-3">
+                <div class="alert alert-danger">
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="mb-0">Application is running in the <code>{{ environment }}</code> environment. Not the real thing.</p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+{% endif %}
+
 <div class="container main-container pb-3">
     {% if not hide_title_row %}
         <div class="row">

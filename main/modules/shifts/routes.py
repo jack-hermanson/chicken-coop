@@ -1,10 +1,11 @@
 import datetime
+import random
 
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request
 
-from main import db
+from main import db, logger
 from main.modules.shifts.forms import AssignRecurringShiftForm, AssignSpecificShiftForm
-from main.modules.shifts.models import Shift
+from main.modules.shifts.models import Shift, SpecificShiftInstanceAssignment
 from main.modules.shifts.services import generate_assign_shift_view_model, assign_specific_shift, \
     get_specific_shift_instance_assignments
 from utils.date_time_enums import TimeOfDayEnum
@@ -63,10 +64,16 @@ def specific_shift_signup():
                            specific_shift_instance_assignments=specific_shift_instance_assignments)
 
 
-@shifts.route("/test")
-def test():
+@shifts.route("/specific/create-update", methods=["POST"])
+def specific_shift_signup_create_update():
     form = AssignSpecificShiftForm()
-    form.date.data = datetime.date.today() + datetime.timedelta(days=2)
-    form.assigned_to.data = "Jacksonian"
-    form.time_of_day.data = int(TimeOfDayEnum.MORNING)
-    return assign_specific_shift(form)
+    logger.info("Specific shift signup %s", form.data)
+    if form.validate_on_submit():
+        specific_shift_instance_assignment = assign_specific_shift(form)
+        logger.debug(f"Created or updated specific shift instance assignment with ID "
+                     f"{specific_shift_instance_assignment.specific_shift_instance_assignment_id}")
+        specific_shift_instance_assignments = get_specific_shift_instance_assignments()
+        return render_template("shifts/partials/specific-shift-instance-signup-list-partial.html",
+                               specific_shift_instance_assignments=specific_shift_instance_assignments)
+    else:
+        return "invalid " + form.errors.__str__()

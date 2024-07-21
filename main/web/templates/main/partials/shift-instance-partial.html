@@ -20,13 +20,23 @@
                 {% endif %}
             </h5>
 
-            <p class="mt-2 {% if shift_instance_model.shift_instance_completed_timestamp_form != None %}mb-3{% else %}mb-0{% endif %}">
+            <p class="mt-2 mb-0">
                 {% if shift_instance_model.shift_instance.shift.assigned_to %}
                     Person Responsible: <b>{{ shift_instance_model.shift_instance.shift.assigned_to }}</b>
                 {% else %}
                     <i class="text-muted">Not assigned to anyone</i>
                 {% endif %}
             </p>
+
+            {% if shift_instance_model.shift_instance.instance_assigned_to != None %}
+                <p>
+                    Covered by: <b>{{ shift_instance_model.shift_instance.instance_assigned_to }}</b>
+                </p>
+            {% endif %}
+
+            {% if shift_instance_model.shift_instance_completed_timestamp_form != None %}
+                <div class="mb-3"></div>
+            {% endif %}
 
             {% if shift_instance_model.shift_instance_completed_timestamp_form %}
 {#                <span class="fake-link mt-2 d-inline-block"#}
