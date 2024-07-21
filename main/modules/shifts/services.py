@@ -50,6 +50,7 @@ def generate_next_shift_instances():
                 DayOfWeekEnum(shift.day_of_week),
                 exclude_today=False
             )
+            update_shift_instance_with_assignment(new_shift_instance, shift)
             shift.shift_instances.append(new_shift_instance)
             db.session.add(new_shift_instance)
             db.session.commit()
@@ -196,3 +197,18 @@ def assign_specific_shift(assign_specific_shift_form: AssignSpecificShiftForm) -
 def get_specific_shift_instance_assignments() -> list[SpecificShiftInstanceAssignment]:
     return SpecificShiftInstanceAssignment.query.order_by(
         SpecificShiftInstanceAssignment.instance_date.desc())
+
+
+def update_shift_instance_with_assignment(new_shift_instance: ShiftInstance, shift: Shift):
+    """
+        Given a brand new ShiftInstance, check if there is already a specific date assignment for it.
+        If there is, then make sure to copy that to the instance_assigned_to property.
+    """
+    specific_shift_instance_assignment = SpecificShiftInstanceAssignment.query.filter(
+        and_(
+            func.date(SpecificShiftInstanceAssignment.instance_date) == new_shift_instance.due_date,
+            SpecificShiftInstanceAssignment.time_of_day == shift.time_of_day
+        )
+    ).scalar()
+    if specific_shift_instance_assignment:
+        new_shift_instance.instance_assigned_to = specific_shift_instance_assignment.instance_assigned_to
