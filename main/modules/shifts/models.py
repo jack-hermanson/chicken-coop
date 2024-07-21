@@ -34,4 +34,18 @@ class ShiftInstance(db.Model):
     completed_timestamp = db.Column(db.DateTime, nullable=True)
     completed_by = db.Column(db.String(32), nullable=True)
 
+    # This particular instance of the shift is assigned to someone,
+    # not necessarily the same person as the shift itself.
+    instance_assigned_to = db.Column(db.String(128), nullable=True)
 
+
+class SpecificShiftInstanceAssignment(db.Model):
+    specific_shift_instance_assignment_id = db.Column(db.Integer, primary_key=True)
+    time_of_day = db.Column(db.Integer, nullable=False)
+    instance_date = db.Column(db.DateTime, nullable=False)
+    instance_assigned_to = db.Column(db.String(128), nullable=False)
+
+# todo - add a model for specific instances being taken in the future, a schedule
+# so you can say "I want this shift on 9/1/2024" and put it in ahead of time.
+# the scheduler will look at that when it makes its rounds, and if the date the loop is on
+# finds a match in that table, it will assign it to that person who made the reservation

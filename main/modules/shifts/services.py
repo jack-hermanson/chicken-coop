@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from flask import flash
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, func
 
 from main import logger, db
-from utils.date_functions import get_next_date_with_same_day_of_week, day_of_week_str, time_of_day_str
-from utils.date_time_enums import DayOfWeekEnum
-from .forms import ShiftInstanceCompletedTimestampForm, AssignShiftForm
-from .models import Shift, ShiftInstance
+from utils.date_functions import get_next_date_with_same_day_of_week, day_of_week_str, time_of_day_str, extract_date
+from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
+from .forms import ShiftInstanceCompletedTimestampForm, AssignRecurringShiftForm, AssignSpecificShiftForm
+from .models import Shift, ShiftInstance, SpecificShiftInstanceAssignment
 from datetime import date, datetime, timedelta
 
 from .view_models import ShiftInstanceViewModel, AssignShiftViewModel
@@ -109,17 +109,17 @@ def generate_shift_instance_view_model(shift_instance: ShiftInstance, default_na
     return view_model
 
 
-def generate_assign_shift_view_model(shift: Shift, form: AssignShiftForm = None) -> AssignShiftViewModel:
+def generate_assign_shift_view_model(shift: Shift, form: AssignRecurringShiftForm = None) -> AssignShiftViewModel:
     assign_shift_view_model = AssignShiftViewModel(
         shift=shift,
-        assign_shift_form=(form or AssignShiftForm(
+        assign_shift_form=(form or AssignRecurringShiftForm(
             assigned_to=shift.assigned_to,
             shift_id=shift.shift_id,
             seeking_replacement=shift.seeking_replacement
         ))
     )
-    if not form:
-        assign_shift_view_model.assign_shift_form.secret_code.data = ""
+    # if not form:
+    # assign_shift_view_model.assign_shift_form.secret_code.data = ""
     return assign_shift_view_model
 
 
@@ -146,3 +146,53 @@ def generate_alert_for_shifts_that_need_signups():
                 message += ", "
         message += "."
         flash(message, "warning")
+
+
+def assign_specific_shift(assign_specific_shift_form: AssignSpecificShiftForm) -> SpecificShiftInstanceAssignment:
+    # First, try to find a matching shift instance.
+    existing_shift_instance: ShiftInstance = ShiftInstance.query.join(ShiftInstance.shift).filter(
+        and_(
+            func.date(ShiftInstance.due_date) == assign_specific_shift_form.date.data,
+            Shift.time_of_day == assign_specific_shift_form.time_of_day.data
+        )
+    ).scalar()
+    # Update shift instance record if found.
+    if existing_shift_instance:
+        existing_shift_instance.instance_assigned_to = assign_specific_shift_form.assigned_to.data
+        db.session.commit()
+
+    # Try to find existing SpecificShiftInstanceAssignment with that date and shift
+    existing_specific_shift_instance_assignment = SpecificShiftInstanceAssignment.query.filter(
+        and_(
+            func.date(SpecificShiftInstanceAssignment.instance_date) == assign_specific_shift_form.date.data,
+            SpecificShiftInstanceAssignment.time_of_day == assign_specific_shift_form.time_of_day.data
+        )
+    ).scalar()
+    if existing_specific_shift_instance_assignment:
+        logger.warn(f"Updating existing specific shift instance assignment with ID "
+                    f"{existing_specific_shift_instance_assignment.specific_shift_instance_assignment_id}")
+        logger.debug(f"{existing_specific_shift_instance_assignment.instance_date.strftime('%F')} "
+                     f"{time_of_day_str(existing_specific_shift_instance_assignment.time_of_day)}")
+        # only need to change person, no need to set date and time
+        logger.debug(f"Original: {existing_specific_shift_instance_assignment.instance_assigned_to}")
+        existing_specific_shift_instance_assignment.instance_assigned_to = assign_specific_shift_form.assigned_to.data
+        logger.debug(f"New: {assign_specific_shift_form.assigned_to.data}")
+        db.session.commit()
+        return existing_specific_shift_instance_assignment
+
+    # Need to add it to the queue
+    logger.info("Adding a new specific_shift_instance_assignment %s %s", assign_specific_shift_form.date.data,
+                time_of_day_str(TimeOfDayEnum(int(assign_specific_shift_form.time_of_day.data))))
+    specific_shift_instance_assignment = SpecificShiftInstanceAssignment()
+    specific_shift_instance_assignment.instance_assigned_to = assign_specific_shift_form.assigned_to.data
+    specific_shift_instance_assignment.time_of_day = TimeOfDayEnum(int(assign_specific_shift_form.time_of_day.data))
+    specific_shift_instance_assignment.instance_date = assign_specific_shift_form.date.data
+    db.session.add(specific_shift_instance_assignment)
+    db.session.commit()
+
+    return specific_shift_instance_assignment
+
+
+def get_specific_shift_instance_assignments() -> list[SpecificShiftInstanceAssignment]:
+    return SpecificShiftInstanceAssignment.query.order_by(
+        SpecificShiftInstanceAssignment.instance_date.desc())

@@ -101,6 +101,10 @@ def create_app(config_class=Config):
             suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(value % 10, 'th')
         return f"{value}{suffix}"
 
+    @app.context_processor
+    def inject_environment():
+        return dict(environment=os.environ.get("ENVIRONMENT"))
+
     # return the app
     print("RUNNING APPLICATION")
     logger.debug("LOGGING IS RUNNING")

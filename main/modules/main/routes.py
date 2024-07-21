@@ -59,7 +59,8 @@ def save_shift_instance():
         db.session.commit()
 
         response = make_response(redirect(url_for("main.index")))
-        response.set_cookie("name", form.completed_by.data)
+        one_year_in_seconds = 31_536_000
+        response.set_cookie("name", form.completed_by.data, max_age=one_year_in_seconds)
         flash(f"Successfully updated {day_of_week_str(shift_instance.shift.day_of_week)} "
               f"{time_of_day_str(shift_instance.shift.time_of_day)}.", "success")
         return response

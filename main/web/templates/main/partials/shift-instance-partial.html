@@ -20,30 +20,48 @@
                 {% endif %}
             </h5>
 
-            <p class="mt-2 {% if shift_instance_model.shift_instance_completed_timestamp_form != None %}mb-3{% else %}mb-0{% endif %}">
+            <p class="mt-2 mb-0">
                 {% if shift_instance_model.shift_instance.shift.assigned_to %}
                     Person Responsible: <b>{{ shift_instance_model.shift_instance.shift.assigned_to }}</b>
                 {% else %}
                     <i class="text-muted">Not assigned to anyone</i>
                 {% endif %}
+                {% if shift_instance_model.shift_instance.instance_assigned_to != None %}
+                    *
+                {% endif %}
             </p>
 
+            {% if shift_instance_model.shift_instance.instance_assigned_to != None %}
+                <p>
+                    * Covered by: <b>{{ shift_instance_model.shift_instance.instance_assigned_to }}</b>
+                </p>
+            {% endif %}
+
+            {% if shift_instance_model.shift_instance_completed_timestamp_form != None %}
+                <div class="mb-3"></div>
+            {% endif %}
+
             {% if shift_instance_model.shift_instance_completed_timestamp_form %}
-{#                <span class="fake-link mt-2 d-inline-block"#}
-{#                      onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})"#}
-{#                >#}
-{#                    Toggle Completion Form#}
-{#                </span>#}
+                {#                <span class="fake-link mt-2 d-inline-block"#}
+                {#                      onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})"#}
+                {#                >#}
+                {#                    Toggle Completion Form#}
+                {#                </span>#}
                 {% if shift_instance_model.shift_instance.completed_timestamp == None %}
-                    <button class="btn btn-success" onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})">
+                    <button class="btn btn-success"
+                            onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})">
                         Complete this shift
                     </button>
-                    <small class="text-muted d-block mt-2 fst-italic">This shift has not been marked as completed yet. To complete it, tap/click the button, then fill out the form and hit <b>"Save"</b>.</small>
+                    <small class="text-muted d-block mt-2 fst-italic">This shift has not been marked as completed yet.
+                        To complete it, tap/click the button, then fill out the form and hit <b>"Save"</b>.</small>
                 {% else %}
-                    <button class="btn btn-primary" onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})">
+                    <button class="btn btn-primary"
+                            onclick="toggleShiftInstanceForm({{ shift_instance_model.shift_instance.shift_instance_id }})">
                         Edit this shift's completion
                     </button>
-                    <small class="text-muted d-block mt-2 fst-italic">This shift has already been completed by {{ shift_instance_model.shift_instance.completed_by }}. Click the button to edit that.</small>
+                    <small class="text-muted d-block mt-2 fst-italic">This shift has already been completed
+                        by {{ shift_instance_model.shift_instance.completed_by }}. Click the button to edit
+                        that.</small>
                 {% endif %}
             {% endif %}
 
@@ -64,7 +82,10 @@
                             {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, class="mt-2 mb-0", render_kw={"class": "form-control-sm form-control"}) }}
                             <div class="mt-auto pt-3">
                                 {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-success mt-auto") }}
-                                <button class="btn btn-danger btn-sm" hx-replace-url="true" hx-target="body" hx-post="{{ url_for('main.undo_shift_instance', shift_instance_id=shift_instance_model.shift_instance.shift_instance_id) }}">Clear</button>
+                                <button class="btn btn-danger btn-sm" hx-replace-url="true" hx-target="body"
+                                        hx-post="{{ url_for('main.undo_shift_instance', shift_instance_id=shift_instance_model.shift_instance.shift_instance_id) }}">
+                                    Clear
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -72,15 +93,17 @@
             {% endif %}
 
             {% if shift_instance_model.shift_instance.shift.seeking_replacement or not shift_instance_model.shift_instance.shift.assigned_to %}
-            	<div class="alert alert-warning mt-3 mb-0">
-                    This shift needs a volunteer. <a class="alert-link" href="{{ url_for('shifts.shift_signup') }}#shift-{{ shift_instance_model.shift_instance.shift.shift_id }}">Click here</a> to view the shift signup form.
+                <div class="alert alert-warning mt-3 mb-0">
+                    This shift needs a volunteer. <a class="alert-link"
+                                                     href="{{ url_for('shifts.recurring_shift_signup') }}#shift-{{ shift_instance_model.shift_instance.shift.shift_id }}">Click
+                    here</a> to view the shift signup form.
                 </div>
             {% endif %}
         {% endcall %}
-{#        {% call card_footer(class="") %}#}
-{#            <div class="d-flex">#}
-{#            </div>#}
-{#        {% endcall %}#}
+        {#        {% call card_footer(class="") %}#}
+        {#            <div class="d-flex">#}
+        {#            </div>#}
+        {#        {% endcall %}#}
     {% endcall %}
 
 {% endmacro %}

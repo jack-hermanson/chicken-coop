@@ -1,6 +1,6 @@
-{% macro tabs() %}
+{% macro tabs(class="") %}
 
-    <ul class="nav nav-tabs" role="tablist">
+    <ul class="nav nav-tabs {{ class }}" role="tablist">
         {{ caller() }}
     </ul>
 
