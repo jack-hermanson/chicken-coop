@@ -91,3 +91,8 @@ def seed_shifts():
         (str(DayOfWeekEnum(s.day_of_week)), str(TimeOfDayEnum(s.time_of_day)))
         for s in Shift.query.all()
     ]
+
+
+@main.route("/fake-error")
+def fake_error():
+    raise ValueError("Just want to see what happens")
