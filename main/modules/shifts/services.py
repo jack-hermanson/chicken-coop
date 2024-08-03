@@ -199,6 +199,18 @@ def get_specific_shift_instance_assignments() -> list[SpecificShiftInstanceAssig
         SpecificShiftInstanceAssignment.instance_date.desc())
 
 
+def get_paginated_specific_shift_instance_assignments(page: int):
+    specific_shift_instance_assignments = (
+        SpecificShiftInstanceAssignment.query
+        .order_by(
+            SpecificShiftInstanceAssignment.instance_date.desc(),
+            SpecificShiftInstanceAssignment.time_of_day.desc()
+        )
+        .paginate(page=page, per_page=10)
+    )
+    return specific_shift_instance_assignments
+
+
 def update_shift_instance_with_assignment(new_shift_instance: ShiftInstance, shift: Shift):
     """
         Given a brand new ShiftInstance, check if there is already a specific date assignment for it.

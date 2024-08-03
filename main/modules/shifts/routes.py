@@ -7,7 +7,7 @@ from main import db, logger
 from main.modules.shifts.forms import AssignRecurringShiftForm, AssignSpecificShiftForm
 from main.modules.shifts.models import Shift, SpecificShiftInstanceAssignment
 from main.modules.shifts.services import generate_assign_shift_view_model, assign_specific_shift, \
-    get_specific_shift_instance_assignments
+    get_specific_shift_instance_assignments, get_paginated_specific_shift_instance_assignments
 from utils.date_time_enums import TimeOfDayEnum
 
 shifts = Blueprint("shifts", __name__, url_prefix="/shifts")
@@ -58,10 +58,11 @@ def sign_up():
 @shifts.route("/specific")
 def specific_shift_signup():
     form = AssignSpecificShiftForm()
-    specific_shift_instance_assignments = get_specific_shift_instance_assignments()
+    page = int(request.args.get("page", default=1, type=int))
+    paginated_specific_shift_instance_assignments = get_paginated_specific_shift_instance_assignments(page)
     return render_template("shifts/specific-shift-signup.html",
                            form=form,
-                           specific_shift_instance_assignments=specific_shift_instance_assignments)
+                           paginated_specific_shift_instance_assignments=paginated_specific_shift_instance_assignments)
 
 
 @shifts.route("/specific/create-update", methods=["POST"])
@@ -72,8 +73,8 @@ def specific_shift_signup_create_update():
         specific_shift_instance_assignment = assign_specific_shift(form)
         logger.debug(f"Created or updated specific shift instance assignment with ID "
                      f"{specific_shift_instance_assignment.specific_shift_instance_assignment_id}")
-        specific_shift_instance_assignments = get_specific_shift_instance_assignments()
+        paginated_specific_shift_instance_assignments = get_paginated_specific_shift_instance_assignments(1)
         return render_template("shifts/partials/specific-shift-instance-signup-list-partial.html",
-                               specific_shift_instance_assignments=specific_shift_instance_assignments)
+                               paginated_specific_shift_instance_assignments=paginated_specific_shift_instance_assignments)
     else:
         return "invalid " + form.errors.__str__()
