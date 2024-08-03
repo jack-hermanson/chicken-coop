@@ -1,3 +1,16 @@
-{% for specific_shift_instance_assignment in specific_shift_instance_assignments %}
-    {% include "shifts/partials/specific-shift-instance-signup-card-partial.html" %}
-{% endfor %}
+{% from "macros/pagination.html" import pagination %}
+
+<div id="specific-shifts-instance-assignments-list">
+    <div class="row" id="specific-shift-instances">
+        <div class="col">
+            {% for specific_shift_instance_assignment in paginated_specific_shift_instance_assignments.items %}
+                {% include "shifts/partials/specific-shift-instance-signup-card-partial.html" %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ pagination(paginated_specific_shift_instance_assignments, "shifts.specific_shift_signup", suffix="#specific-shift-instances") }}
+        </div>
+    </div>
+</div>
