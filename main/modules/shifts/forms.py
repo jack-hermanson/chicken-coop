@@ -2,7 +2,7 @@ import time
 
 from flask_wtf import FlaskForm
 from wtforms import DateTimeLocalField, StringField, SubmitField, HiddenField, TelField, BooleanField, SelectField, \
-    DateField
+    DateField, IntegerField
 from wtforms.validators import DataRequired, Optional, ValidationError, Length
 from datetime import datetime
 from main import Config
@@ -18,6 +18,10 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
     completed_timestamp = DateTimeLocalField(label="Completed Time", format='%Y-%m-%dT%H:%M', validators=[Optional()],
                                              default=datetime.now, description="When was this shift completed?")
     completed_by = StringField("Completed By", validators=[], description="Who completed this shift?")
+    eggs = IntegerField(
+        description="Did you get any eggs? If so, how many?",
+        validators=[Optional()]
+    )
     submit = SubmitField("Save")
 
 
