@@ -100,6 +100,7 @@ def generate_shift_instance_view_model(shift_instance: ShiftInstance, default_na
         if shift_instance.completed_timestamp:
             form.completed_timestamp.data = shift_instance.completed_timestamp
             form.completed_by.data = shift_instance.completed_by
+            form.eggs.data = shift_instance.eggs
     else:
         form = None
 

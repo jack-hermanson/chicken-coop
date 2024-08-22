@@ -31,6 +31,10 @@
                 {% endif %}
             </p>
 
+            {% if shift_instance_model.shift_instance.eggs %}
+                <p class="my-0">Eggs Collected: <b>{{ shift_instance_model.shift_instance.eggs }}</b></p>
+            {% endif %}
+
             {% if shift_instance_model.shift_instance.instance_assigned_to != None %}
                 <p class="mb-0">
                     * Covered by: <b>{{ shift_instance_model.shift_instance.instance_assigned_to }}</b>
@@ -77,9 +81,10 @@
                                 "completed_timestamp",
                                 required=True,
                                 render_kw={"class": "form-control-sm form-control"},
-                                class="me-lg-3 mb-0"
+                                class=""
                             ) }}
-                            {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, class="mt-2 mb-0", render_kw={"class": "form-control-sm form-control"}) }}
+                            {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, class="", render_kw={"class": "form-control-sm form-control"}) }}
+                            {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "eggs", required=False, class="", render_kw={"class": "form-control-sm form-control"}) }}
                             <div class="mt-auto pt-3">
                                 {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-success mt-auto") }}
                                 <button class="btn btn-danger btn-sm" hx-replace-url="true" hx-target="body"
