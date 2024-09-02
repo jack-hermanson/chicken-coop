@@ -60,7 +60,9 @@ def generate_next_shift_instances():
         # there should only be one
         future_shift_instances = get_future_shift_instances(shift.shift_id)
         if len(future_shift_instances) != 1:
-            logger.error(f"There are {len(future_shift_instances)} shift instances for shift with ID {shift.shift_id}")
+            logger.error(
+                f"There {'is' if len(future_shift_instances) == 1 else 'are'} {len(future_shift_instances)} shift "
+                f"instance{'' if len(future_shift_instances) == 1 else 's'} for shift with ID {shift.shift_id}")
             raise ValueError("Bad shift instance count")
         shift_instances_to_return.append(future_shift_instances[0])
 
@@ -140,7 +142,8 @@ def generate_alert_for_shifts_that_need_signups():
     """Generate the alert saying these shifts need signups."""
     shifts_that_need_signups = get_shifts_that_need_signups()
     if len(shifts_that_need_signups):
-        logger.info(f"There are {len(shifts_that_need_signups)} shifts that need signups")
+        logger.info(f"There {'is' if len(shifts_that_need_signups) else 'are'} {len(shifts_that_need_signups)} "
+                    f"shift{'' if len(shifts_that_need_signups) else 's'} that need signups")
         message = "The following shifts are looking for volunteers: "
         for index, shift in enumerate(shifts_that_need_signups):
             message += f"{day_of_week_str(shift.day_of_week)} {time_of_day_str(shift.time_of_day)}"

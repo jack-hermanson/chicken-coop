@@ -31,7 +31,7 @@
                 {% endif %}
             </p>
 
-            {% if shift_instance_model.shift_instance.eggs %}
+            {% if shift_instance_model.shift_instance.eggs != None %}
                 <p class="my-0">Eggs Collected: <b>{{ shift_instance_model.shift_instance.eggs }}</b></p>
             {% endif %}
 
