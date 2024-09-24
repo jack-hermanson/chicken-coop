@@ -228,3 +228,36 @@ def update_shift_instance_with_assignment(new_shift_instance: ShiftInstance, shi
     ).scalar()
     if specific_shift_instance_assignment:
         new_shift_instance.instance_assigned_to = specific_shift_instance_assignment.instance_assigned_to
+
+
+def get_average_eggs_for_all_shifts():
+    return (db.session
+            .query(func.avg(ShiftInstance.eggs))
+            .filter(ShiftInstance.eggs.is_not(None))
+            .scalar())
+
+
+def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: TimeOfDayEnum):
+    return (db.session
+            .query(func.avg(ShiftInstance.eggs))
+            .join(ShiftInstance.shift)
+            .filter(and_(
+                ShiftInstance.eggs.is_not(None),
+                Shift.time_of_day == time_of_day,
+                Shift.day_of_week == day_of_week
+            ))
+            .scalar())
+
+
+def get_average_eggs_per_shift():
+    output = []
+    for day in [DayOfWeekEnum.MONDAY, DayOfWeekEnum.TUESDAY, DayOfWeekEnum.WEDNESDAY,
+                DayOfWeekEnum.THURSDAY, DayOfWeekEnum.FRIDAY, DayOfWeekEnum.SATURDAY, DayOfWeekEnum.SUNDAY]:
+        day_dict = {
+            "day of week": day_of_week_str(day),
+            "morning": get_average_eggs_for_day_and_time(day, TimeOfDayEnum.MORNING),
+            "evening": get_average_eggs_for_day_and_time(day, TimeOfDayEnum.EVENING)
+        }
+        output.append(day_dict)
+    return output
+
