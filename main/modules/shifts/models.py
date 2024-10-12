@@ -17,7 +17,7 @@ class Shift(db.Model):
     # I had these, but I'm going to cheap out and just use a string
     # person_id = db.mapped_column(db.ForeignKey("person.person_id"), nullable=True)
     # person = db.relationship("Person", back_populates="shifts")
-    seeking_replacement = db.Column(db.Boolean, nullable=False, default=str(0))
+    seeking_replacement = db.Column(db.Boolean, nullable=False, default=False)
 
     shift_instances = db.relationship("ShiftInstance", back_populates="shift", cascade="all, delete-orphan")
 
