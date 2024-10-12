@@ -84,7 +84,7 @@ def seed_shifts():
         for time_of_day in times_of_day:
             shift = Shift(
                 day_of_week=day_of_week,
-                time_of_day=time_of_day
+                time_of_day=time_of_day,
             )
             db.session.add(shift)
             db.session.commit()
