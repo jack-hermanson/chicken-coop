@@ -1,6 +1,7 @@
 import datetime
+import os
 
-from flask import Blueprint, render_template, url_for, request, make_response, session, flash, redirect
+from flask import Blueprint, render_template, url_for, request, make_response, session, flash, redirect, send_from_directory
 from main import logger, db
 from main.modules.shifts.models import Shift, ShiftInstance
 from utils.date_functions import day_of_week_str, time_of_day_str
@@ -98,3 +99,11 @@ def seed_shifts():
 @main.route("/fake-error")
 def fake_error():
     raise ValueError("Just want to see what happens")
+
+
+@main.route("/faq")
+def faq():
+    path = os.path.abspath("./main/web/static/documents")
+    logger.debug(path)
+
+    return send_from_directory(path, "faq.pdf")
