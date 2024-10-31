@@ -107,3 +107,9 @@ def faq():
     logger.debug(path)
 
     return send_from_directory(path, "faq.pdf")
+
+
+@main.route("/faqs")
+def faqs_redirect():
+    # Redirect the user to "/faq" if they go to "/faqs"
+    return redirect(url_for("main.faq"), code=301)
