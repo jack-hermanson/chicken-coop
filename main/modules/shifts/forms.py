@@ -20,7 +20,10 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
     completed_by = StringField("Completed By", validators=[], description="Who completed this shift?")
     eggs = IntegerField(
         description="Did you get any eggs? If so, how many?",
-        validators=[Optional()]
+        validators=[Optional()],
+        render_kw={
+            "inputmode": "numeric"
+        }
     )
     submit = SubmitField("Save")
 
