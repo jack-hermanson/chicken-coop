@@ -238,11 +238,14 @@ def get_average_eggs_for_all_shifts():
 
 
 def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: TimeOfDayEnum):
+    cutoff_date = datetime.now() - timedelta(weeks=8)
+
     return (db.session
             .query(func.avg(ShiftInstance.eggs))
             .join(ShiftInstance.shift)
             .filter(and_(
                 ShiftInstance.eggs.is_not(None),
+                ShiftInstance.due_date >= cutoff_date,
                 Shift.time_of_day == time_of_day,
                 Shift.day_of_week == day_of_week
             ))
@@ -261,3 +264,15 @@ def get_average_eggs_per_shift():
         output.append(day_dict)
     return output
 
+
+def test_filter():
+    cutoff_date = datetime.now() - timedelta(weeks=8)
+    data = ShiftInstance.query.filter(and_(
+        ShiftInstance.due_date >= cutoff_date
+    )).all()
+    result = []
+    for item in data:
+        result.append({
+            "due_date": item.due_date.__str__()
+        })
+    return result
