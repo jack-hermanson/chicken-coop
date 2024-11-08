@@ -239,7 +239,7 @@ def get_average_eggs_for_all_shifts():
 
 def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: TimeOfDayEnum,
                                       weeks_ago: int):
-    cutoff_date = datetime.now() - timedelta(weeks_ago)
+    cutoff_date = datetime.now() - timedelta(weeks=weeks_ago)
 
     return (db.session
             .query(func.avg(ShiftInstance.eggs))
