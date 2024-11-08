@@ -210,7 +210,7 @@ def get_paginated_specific_shift_instance_assignments(page: int):
             SpecificShiftInstanceAssignment.instance_date.desc(),
             SpecificShiftInstanceAssignment.time_of_day.desc()
         )
-        .paginate(page=page, per_page=10)
+        .paginate(page=page, per_page=14)
     )
     return specific_shift_instance_assignments
 
