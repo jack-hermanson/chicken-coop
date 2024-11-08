@@ -67,6 +67,7 @@ def create_app(config_class=Config):
     from .modules.shifts.routes import shifts
     from .modules.errors.handlers import errors
 
+    app.url_map.strict_slashes = False  # for trailing slashes
     for blueprint in [main, accounts, admin, shifts, errors]:
         app.register_blueprint(blueprint)
 

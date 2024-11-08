@@ -237,8 +237,9 @@ def get_average_eggs_for_all_shifts():
             .scalar())
 
 
-def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: TimeOfDayEnum):
-    cutoff_date = datetime.now() - timedelta(weeks=8)
+def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: TimeOfDayEnum,
+                                      weeks_ago: int):
+    cutoff_date = datetime.now() - timedelta(weeks_ago)
 
     return (db.session
             .query(func.avg(ShiftInstance.eggs))
@@ -252,14 +253,18 @@ def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: T
             .scalar())
 
 
-def get_average_eggs_per_shift():
+def get_average_eggs_per_shift(weeks_ago):
+    """
+    Get average gets per shift.
+    :param weeks_ago: Cutoff date for computing the average. How many weeks ago is the min?
+    """
     output = []
     for day in [DayOfWeekEnum.MONDAY, DayOfWeekEnum.TUESDAY, DayOfWeekEnum.WEDNESDAY,
                 DayOfWeekEnum.THURSDAY, DayOfWeekEnum.FRIDAY, DayOfWeekEnum.SATURDAY, DayOfWeekEnum.SUNDAY]:
         day_dict = {
             "day of week": day_of_week_str(day),
-            "morning": get_average_eggs_for_day_and_time(day, TimeOfDayEnum.MORNING),
-            "evening": get_average_eggs_for_day_and_time(day, TimeOfDayEnum.EVENING)
+            "morning": get_average_eggs_for_day_and_time(day, TimeOfDayEnum.MORNING, weeks_ago),
+            "evening": get_average_eggs_for_day_and_time(day, TimeOfDayEnum.EVENING, weeks_ago)
         }
         output.append(day_dict)
     return output

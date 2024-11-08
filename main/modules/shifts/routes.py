@@ -82,4 +82,5 @@ def specific_shift_signup_create_update():
 
 @shifts.route("/stats")
 def stats():
-    return get_average_eggs_per_shift()
+    weeks = int(request.args.get("weeks")) if request.args.get("weeks") else 8
+    return get_average_eggs_per_shift(weeks)
