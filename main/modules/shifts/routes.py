@@ -7,7 +7,7 @@ from main import db, logger
 from main.modules.shifts.forms import AssignRecurringShiftForm, AssignSpecificShiftForm
 from main.modules.shifts.models import Shift, SpecificShiftInstanceAssignment
 from main.modules.shifts.services import generate_assign_shift_view_model, assign_specific_shift, \
-    get_paginated_specific_shift_instance_assignments, get_average_eggs_per_shift
+    get_paginated_specific_shift_instance_assignments, get_average_eggs_per_shift, test_filter
 from utils.date_time_enums import TimeOfDayEnum
 
 shifts = Blueprint("shifts", __name__, url_prefix="/shifts")
@@ -84,3 +84,8 @@ def specific_shift_signup_create_update():
 def stats():
     weeks = int(request.args.get("weeks")) if request.args.get("weeks") else 8
     return get_average_eggs_per_shift(weeks)
+
+
+@shifts.route("/test")
+def test():
+    return test_filter()

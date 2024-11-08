@@ -273,11 +273,13 @@ def get_average_eggs_per_shift(weeks_ago):
 def test_filter():
     cutoff_date = datetime.now() - timedelta(weeks=8)
     data = ShiftInstance.query.filter(and_(
-        ShiftInstance.due_date >= cutoff_date
+        ShiftInstance.due_date >= cutoff_date,
+        ShiftInstance.eggs.isnot(None)
     )).all()
     result = []
     for item in data:
         result.append({
-            "due_date": item.due_date.__str__()
+            "due_date": item.due_date.__str__(),
+            "eggs": item.eggs
         })
     return result
