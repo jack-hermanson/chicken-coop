@@ -265,10 +265,12 @@ def get_average_eggs_per_shift(weeks_ago):
         morning = get_average_eggs_for_day_and_time(day, TimeOfDayEnum.MORNING, weeks_ago)
         evening = get_average_eggs_for_day_and_time(day, TimeOfDayEnum.EVENING, weeks_ago)
         difference = round(evening - morning, 3)
+        total = round(morning + evening, 3)
         day_dict = {
             "day of week": day_of_week_str(day),
             "morning": morning,
             "evening": evening,
+            "total": total,
             "difference": difference
         }
         output.append(day_dict)
