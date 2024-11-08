@@ -241,16 +241,17 @@ def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: T
                                       weeks_ago: int):
     cutoff_date = datetime.now() - timedelta(weeks=weeks_ago)
 
-    return (db.session
-            .query(func.avg(ShiftInstance.eggs))
-            .join(ShiftInstance.shift)
-            .filter(and_(
-                ShiftInstance.eggs.isnot(None),
-                ShiftInstance.due_date >= cutoff_date,
-                Shift.time_of_day == time_of_day,
-                Shift.day_of_week == day_of_week
-            ))
-            .scalar())
+    average_eggs = (db.session
+                    .query(func.avg(ShiftInstance.eggs))
+                    .join(ShiftInstance.shift)
+                    .filter(and_(
+                        ShiftInstance.eggs.isnot(None),
+                        ShiftInstance.due_date >= cutoff_date,
+                        Shift.time_of_day == time_of_day,
+                        Shift.day_of_week == day_of_week
+                    ))
+                    .scalar())
+    return average_eggs if average_eggs is not None else 0
 
 
 def get_average_eggs_per_shift(weeks_ago):
