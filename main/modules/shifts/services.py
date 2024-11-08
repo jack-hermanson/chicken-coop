@@ -251,7 +251,7 @@ def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: T
                         Shift.day_of_week == day_of_week
                     ))
                     .scalar()) or 0
-    return average_eggs if average_eggs >= 0.1 else 0
+    return float(average_eggs) if float(average_eggs) >= 0.1 else 0
 
 
 def get_average_eggs_per_shift(weeks_ago):
