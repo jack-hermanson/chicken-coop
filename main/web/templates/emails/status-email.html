@@ -1,0 +1,19 @@
+<html lang="en">
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+    <head>
+        <title>
+            {{ summary_text }}
+        </title>
+    </head>
+    <body>
+        <h1>{{ summary_text }}</h1>
+        <p>It's {{ day_of_week_str }}, and {{ person_responsible }} has{% if not shift_was_completed %} NOT{% endif %} completed the {{ time_of_day_str }} shift.</p>
+        {% if eggs != None %}
+            <p>The shift yielded {{ eggs }} egg{% if eggs != 1 %}s{% endif %}.</p>
+        {% endif %}
+    </body>
+</html>
