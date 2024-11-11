@@ -15,3 +15,11 @@ class Config:
         SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL").replace("postgres://", "postgresql://")
     else:
         SQLALCHEMY_DATABASE_URI = "sqlite:///site.db"
+    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.getenv("EMAIL_FROM_ADDRESS")
+    MAIL_PASSWORD = os.getenv("EMAIL_APP_PASSWORD")
+    MAIL_DEBUG = True
+    MAIL_SUPPRESS_SEND = False
+    TESTING = False

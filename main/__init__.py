@@ -5,11 +5,12 @@ from logging.handlers import TimedRotatingFileHandler
 
 from flask_bcrypt import Bcrypt
 from flask import Flask, abort
-
 from main.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_mail import Mail
+
 import logging
 import os
 
@@ -20,6 +21,7 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 migrate = Migrate(compare_type=True)
 logging.basicConfig(level=logging.DEBUG)
+mail = Mail()
 
 login_manager = LoginManager()
 login_manager.login_view = "accounts.login"
@@ -66,12 +68,17 @@ def create_app(config_class=Config):
     from .modules.accounts.routes import accounts
     from .modules.shifts.routes import shifts
     from .modules.errors.handlers import errors
+    from .modules.email.routes import emails
 
     app.url_map.strict_slashes = False  # for trailing slashes
-    for blueprint in [main, accounts, admin, shifts, errors]:
+    for blueprint in [main, accounts, admin, shifts, errors, emails]:
         app.register_blueprint(blueprint)
 
+    # login manager
     login_manager.init_app(app)
+
+    # email
+    mail.init_app(app)
 
     # middleware
     # @app.before_request
@@ -133,4 +140,4 @@ fh.namer = lambda name: name.replace(".txt", "") + ".txt"
 logger.addHandler(fh)
 logger.addHandler(sh)
 logger.setLevel(logging.DEBUG if (
-        os.environ.get("FLASK_ENV") == "dev" or os.environ.get("FLASK_ENV") == "development") else logging.INFO)
+    os.environ.get("FLASK_ENV") == "dev" or os.environ.get("FLASK_ENV") == "development") else logging.INFO)
