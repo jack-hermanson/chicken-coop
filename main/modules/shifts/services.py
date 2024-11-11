@@ -81,7 +81,7 @@ def get_previous_shifts(page: int):
             ShiftInstance.due_date < date.today()
         )
         .order_by(ShiftInstance.due_date.desc(), Shift.time_of_day.desc())
-        .paginate(page=page, per_page=10)
+        .paginate(page=page, per_page=14)
     )
     return shift_instances
 
@@ -210,7 +210,7 @@ def get_paginated_specific_shift_instance_assignments(page: int):
             SpecificShiftInstanceAssignment.instance_date.desc(),
             SpecificShiftInstanceAssignment.time_of_day.desc()
         )
-        .paginate(page=page, per_page=14)
+        .paginate(page=page, per_page=10)
     )
     return specific_shift_instance_assignments
 
