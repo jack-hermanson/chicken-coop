@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% set title = "Shift Assignments" %}
+{% set active_route = "main" %}
+
+{% block body %}
+    <div class="row">
+    <div class="col">
+        <p class="lead">Below is a table of shifts. There are 14 of them (1 morning, 1 evening).</p>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="row"></th>
+                    <th scope="row">Monday</th>
+                    <th scope="row">Tuesday</th>
+                    <th scope="row">Wednesday</th>
+                    <th scope="row">Thursday</th>
+                    <th scope="row">Friday</th>
+                    <th scope="row">Saturday</th>
+                    <th scope="row">Sunday</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>Morning</th>
+                    {% for morning_shift in morning_shifts %}
+                        <td>{{ morning_shift.assigned_to }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Evening</th>
+                    {% for evening_shift in evening_shifts %}
+                        <td>{{ evening_shift.assigned_to }}</td>
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

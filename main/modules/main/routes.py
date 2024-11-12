@@ -8,7 +8,7 @@ from utils.date_functions import day_of_week_str, time_of_day_str
 from utils.date_time_enums import DayOfWeekEnum, TimeOfDayEnum
 from ..shifts import services as shift_services
 from ..shifts.forms import ShiftInstanceCompletedTimestampForm
-from ..shifts.services import generate_alert_for_shifts_that_need_signups
+from ..shifts.services import generate_alert_for_shifts_that_need_signups, get_table_data
 
 main = Blueprint("main", __name__, url_prefix="")
 
@@ -113,3 +113,13 @@ def faq():
 def faqs_redirect():
     # Redirect the user to "/faq" if they go to "/faqs"
     return redirect(url_for("main.faq"), code=301)
+
+
+@main.route("/table")
+def table():
+    """Render a table of shifts."""
+    table_shifts = get_table_data()
+    return render_template("main/table.html",
+                           morning_shifts=table_shifts["morning_shifts"],
+                           evening_shifts=table_shifts["evening_shifts"])
+

@@ -290,3 +290,24 @@ def test_filter():
             "eggs": item.eggs
         })
     return result
+
+
+def get_table_data() -> dict[str, list[Shift]]:
+    """Get data for a calendar-like table of shifts."""
+    output = {
+        "morning_shifts": [],
+        "evening_shifts": []
+    }
+    morning_shifts = Shift.query.filter(Shift.time_of_day == TimeOfDayEnum.MORNING).order_by(
+        Shift.day_of_week,
+        Shift.time_of_day.desc()
+    ).all()
+    evening_shifts = Shift.query.filter(Shift.time_of_day == TimeOfDayEnum.EVENING).order_by(
+        Shift.day_of_week,
+        Shift.time_of_day.desc()
+    ).all()
+    output["morning_shifts"] = morning_shifts
+    output["evening_shifts"] = evening_shifts
+    return output
+
+
