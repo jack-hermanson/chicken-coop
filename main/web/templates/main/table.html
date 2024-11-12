@@ -13,7 +13,7 @@
         <div class="col">
             <div class="table-responsive">
 
-                <table class="table table-dark">
+                <table class="table table-dark table-bordered">
                     <thead>
                     <tr>
                         <th scope="row"></th>
@@ -27,18 +27,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th>Morning</th>
-                        {% for morning_shift in morning_shifts %}
-                            <td>{{ morning_shift.assigned_to }}</td>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <th>Evening</th>
-                        {% for evening_shift in evening_shifts %}
-                            <td>{{ evening_shift.assigned_to }}</td>
-                        {% endfor %}
-                    </tr>
+                    {% for (time, shift_group) in [("Morning", morning_shifts), ("Evening", evening_shifts)] %}
+                        <tr>
+                            <th>{{ time }}</th>
+                            {% for shift in shift_group %}
+                                <td>
+                                    {{ shift.assigned_to }}
+                                    {% if shift.seeking_replacement %}
+                                        <span class="badge bg-success d-block">AVAILABLE</span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
                     </tbody>
                 </table>
             </div>
