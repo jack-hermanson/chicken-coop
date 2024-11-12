@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% set title = "Shift Table" %}
+{% set active_route = "main" %}
+
+{% block body %}
+	<table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Morning</th>
+                {% for morning_shift in morning_shifts %}
+                	<td>{{ morning_shift.assigned_to }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Evening</th>
+                {% for evening_shift in evening_shifts %}
+                	<td>{{ evening_shift.assigned_to }}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
