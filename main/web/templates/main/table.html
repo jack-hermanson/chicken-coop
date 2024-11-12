@@ -32,9 +32,11 @@
                             <th>{{ time }}</th>
                             {% for shift in shift_group %}
                                 <td>
+
                                     {{ shift.assigned_to }}
                                     {% if shift.seeking_replacement %}
-                                        <span class="badge bg-success d-block">AVAILABLE</span>
+                                        <br>
+                                        <span class="badge bg-success ms-1">AVAILABLE</span>
                                     {% endif %}
                                 </td>
                             {% endfor %}
