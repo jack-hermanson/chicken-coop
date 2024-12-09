@@ -72,7 +72,7 @@
             {% if shift_instance_model.shift_instance_completed_timestamp_form %}
                 <div id="shift-instance-form-container-{{ shift_instance_model.shift_instance.shift_instance_id }}"
                      class="d-none mt-3">
-                    <form action="{{ url_for('main.save_shift_instance') }}" method="POST">
+                    <form action="{{ url_for('main.save_shift_instance') }}" method="POST" class="shift-completion-form" data-time-of-day="{{ shift_instance_model.shift_instance.shift.time_of_day }}">
                         {{ shift_instance_model.shift_instance_completed_timestamp_form.csrf_token() }}
                         {{ shift_instance_model.shift_instance_completed_timestamp_form.shift_instance_id() }}
                         <div class="mb-3">
