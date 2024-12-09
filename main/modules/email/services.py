@@ -44,6 +44,7 @@ def send_status_email():
                                  day_of_week_str=day_of_week_str,
                                  time_of_day_str=time_of_day_str,
                                  shift_was_completed=shift_was_completed,
+                                 completed_by=relevant_shift_instance.completed_by,
                                  eggs=eggs)
     # Create the email
     message = Message(
