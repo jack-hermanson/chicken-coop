@@ -342,7 +342,8 @@ def set_sunrise_sunset(shift_instance: ShiftInstance, shift: Shift):
 
 
 def set_sunrise_sunset_on_all():
-    shift_instances = ShiftInstance.query.join(
+    shift_instances = ShiftInstance.query.filter(and_(ShiftInstance.sunrise_utc.is_(None),
+                                                      ShiftInstance.sunset_utc.is_(None))).join(
         ShiftInstance.shift).all()
 
     for shift_instance in shift_instances:
