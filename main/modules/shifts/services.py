@@ -297,6 +297,40 @@ def get_average_eggs_per_shift(weeks_ago):
     return output
 
 
+def get_raw_shift_instance_data() -> str:
+    """
+    Get all of our shift instance data, dump it into a CSV.
+    """
+    raw_data = (ShiftInstance.query
+                .filter(ShiftInstance.due_date <= datetime.today())
+                .join(ShiftInstance.shift)
+                .order_by(ShiftInstance.due_date, Shift.time_of_day)
+                .all())
+    headers = [
+        "shift_instance_id",
+        "date",
+        "time_of_day",
+        "completed_by",
+        "completed_timestamp",
+        "eggs"
+    ]
+    rows = [
+        ([
+            str(shift_instance.shift_instance_id),
+            shift_instance.due_date.strftime("%F") if shift_instance.due_date is not None else "null",
+            str(shift_instance.shift.time_of_day),
+            shift_instance.completed_by.strip() if shift_instance.completed_by is not None else "null",
+            shift_instance.completed_timestamp.strftime("%T") if shift_instance.completed_timestamp is not None else "null",
+            str(shift_instance.eggs) if shift_instance.eggs is not None else "null",
+        ]) for shift_instance in raw_data
+    ]
+    output_string = ",".join(headers) + "\n"
+    for row in rows:
+        output_string += ",".join(row) + "\n"
+    return output_string
+
+
+
 def test_filter():
     cutoff_date = datetime.now() - timedelta(weeks=8)
     data = ShiftInstance.query.filter(and_(

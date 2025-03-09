@@ -1,14 +1,14 @@
 import dataclasses
 import datetime
 
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, Response
 
 from main import db, logger
 from main.modules.shifts.forms import AssignRecurringShiftForm, AssignSpecificShiftForm
 from main.modules.shifts.models import Shift
 from main.modules.shifts.services import generate_assign_shift_view_model, assign_specific_shift, \
     get_paginated_specific_shift_instance_assignments, get_average_eggs_per_shift, test_filter, \
-    set_sunrise_sunset_on_all
+    set_sunrise_sunset_on_all, get_raw_shift_instance_data
 from main.modules.shifts.utils.sunrise_sunset import get_sunrise_sunset
 
 shifts = Blueprint("shifts", __name__, url_prefix="/shifts")
@@ -85,6 +85,14 @@ def specific_shift_signup_create_update():
 def stats():
     weeks = int(request.args.get("weeks")) if request.args.get("weeks") else 8
     return get_average_eggs_per_shift(weeks)
+
+
+@shifts.route("/raw-data")
+def raw_data():
+    logger.debug("Retrieving raw shift instance data as CSV")
+    csv_str = get_raw_shift_instance_data()
+    response = Response(csv_str, mimetype="text/plain")
+    return response
 
 
 @shifts.route("/test")
