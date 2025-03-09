@@ -324,9 +324,9 @@ def get_raw_shift_instance_data() -> str:
             str(shift_instance.eggs) if shift_instance.eggs is not None else "null",
         ]) for shift_instance in raw_data
     ]
-    output_string = ", ".join(headers) + "\n"
+    output_string = ",".join(headers) + "\n"
     for row in rows:
-        output_string += ", ".join(row) + "\n"
+        output_string += ",".join(row) + "\n"
     return output_string
 
 
