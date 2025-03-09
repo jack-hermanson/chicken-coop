@@ -1,14 +1,15 @@
+import dataclasses
 import datetime
-import random
 
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify
 
 from main import db, logger
 from main.modules.shifts.forms import AssignRecurringShiftForm, AssignSpecificShiftForm
-from main.modules.shifts.models import Shift, SpecificShiftInstanceAssignment
+from main.modules.shifts.models import Shift
 from main.modules.shifts.services import generate_assign_shift_view_model, assign_specific_shift, \
-    get_paginated_specific_shift_instance_assignments, get_average_eggs_per_shift, test_filter
-from utils.date_time_enums import TimeOfDayEnum
+    get_paginated_specific_shift_instance_assignments, get_average_eggs_per_shift, test_filter, \
+    set_sunrise_sunset_on_all
+from main.modules.shifts.utils.sunrise_sunset import get_sunrise_sunset
 
 shifts = Blueprint("shifts", __name__, url_prefix="/shifts")
 
@@ -89,3 +90,9 @@ def stats():
 @shifts.route("/test")
 def test():
     return test_filter()
+
+
+@shifts.route("/sun")
+def sun():
+    set_sunrise_sunset_on_all()
+    return jsonify(dataclasses.asdict(get_sunrise_sunset(datetime.datetime.now())))

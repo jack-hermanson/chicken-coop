@@ -38,6 +38,10 @@ class ShiftInstance(db.Model):
     # not necessarily the same person as the shift itself.
     instance_assigned_to = db.Column(db.String(128), nullable=True)
 
+    # Record the sunrise time on mornings, sunset time on evenings
+    sunrise_utc = db.Column(db.DateTime, nullable=True)
+    sunset_utc = db.Column(db.DateTime, nullable=True)
+
     eggs = db.Column(db.Integer, nullable=True)
 
 
