@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import time
+
+from dateutil import tz
 from flask import flash
 from sqlalchemy import and_, or_, func
 
@@ -10,6 +13,7 @@ from .forms import ShiftInstanceCompletedTimestampForm, AssignRecurringShiftForm
 from .models import Shift, ShiftInstance, SpecificShiftInstanceAssignment
 from datetime import date, datetime, timedelta
 
+from .utils.sunrise_sunset import get_sunrise_sunset
 from .view_models import ShiftInstanceViewModel, AssignShiftViewModel
 
 
@@ -50,6 +54,7 @@ def generate_next_shift_instances():
                 DayOfWeekEnum(shift.day_of_week),
                 exclude_today=False
             )
+            set_sunrise_sunset(new_shift_instance, shift)
             update_shift_instance_with_assignment(new_shift_instance, shift)
             shift.shift_instances.append(new_shift_instance)
             db.session.add(new_shift_instance)
@@ -106,9 +111,24 @@ def generate_shift_instance_view_model(shift_instance: ShiftInstance, default_na
     else:
         form = None
 
+    from_zone = tz.gettz('UTC')
+    to_zone = tz.gettz('America/Denver')
+
     view_model = ShiftInstanceViewModel(
         shift_instance,
-        form
+        form,
+        sunrise=(shift_instance.sunrise_utc.replace(tzinfo=from_zone).astimezone(to_zone).strftime(
+            "%l:%M %p") if shift_instance.sunrise_utc else None),
+        sunset=(shift_instance.sunset_utc.replace(tzinfo=from_zone).astimezone(to_zone).strftime(
+            "%l:%M %p") if shift_instance.sunset_utc else None),
+        target_time=(
+            (shift_instance.sunrise_utc + timedelta(minutes=30)).replace(tzinfo=from_zone).astimezone(to_zone).strftime(
+                "%l:%M %p") if shift_instance.sunrise_utc is not None
+            else None
+        )
+        # target_time=(
+        #     (shift_instance.sunrise_utc.replace(tzinfo=from_zone).astimezone(to_zone) + timedelta(minutes=30)).strftime(
+        #         "%l:%M %p") if shift_instance.sunset_utc else None),
     )
     return view_model
 
@@ -245,11 +265,11 @@ def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: T
                     .query(func.avg(ShiftInstance.eggs))
                     .join(ShiftInstance.shift)
                     .filter(and_(
-                        ShiftInstance.eggs.isnot(None),
-                        ShiftInstance.due_date >= cutoff_date,
-                        Shift.time_of_day == time_of_day,
-                        Shift.day_of_week == day_of_week
-                    ))
+        ShiftInstance.eggs.isnot(None),
+        ShiftInstance.due_date >= cutoff_date,
+        Shift.time_of_day == time_of_day,
+        Shift.day_of_week == day_of_week
+    ))
                     .scalar()) or 0
     return round(float(average_eggs) if float(average_eggs) >= 0.1 else 0, 3)
 
@@ -311,3 +331,21 @@ def get_table_data() -> dict[str, list[Shift]]:
     return output
 
 
+def set_sunrise_sunset(shift_instance: ShiftInstance, shift: Shift):
+    sunrise_sunset = get_sunrise_sunset(shift_instance.due_date)
+    if shift.time_of_day == TimeOfDayEnum.MORNING:
+        logger.info(f"setting sunrise to {sunrise_sunset.sunrise_utc.__str__()} on {shift_instance.shift_instance_id}")
+        shift_instance.sunrise_utc = sunrise_sunset.sunrise_utc
+    if shift.time_of_day == TimeOfDayEnum.EVENING:
+        logger.info(f"setting sunset to {sunrise_sunset.sunset_utc.__str__()} on {shift_instance.shift_instance_id}")
+        shift_instance.sunset_utc = sunrise_sunset.sunset_utc
+
+
+def set_sunrise_sunset_on_all():
+    shift_instances = ShiftInstance.query.join(
+        ShiftInstance.shift).all()
+
+    for shift_instance in shift_instances:
+        set_sunrise_sunset(shift_instance, shift_instance.shift)
+        time.sleep(0.1)
+    db.session.commit()
