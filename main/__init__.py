@@ -69,9 +69,10 @@ def create_app(config_class=Config):
     from .modules.shifts.routes import shifts
     from .modules.errors.handlers import errors
     from .modules.email.routes import emails
+    from .modules.guide.routes import guide
 
     app.url_map.strict_slashes = False  # for trailing slashes
-    for blueprint in [main, accounts, admin, shifts, errors, emails]:
+    for blueprint in [main, accounts, admin, shifts, errors, emails, guide]:
         app.register_blueprint(blueprint)
 
     # login manager

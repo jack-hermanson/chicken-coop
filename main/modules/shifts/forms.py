@@ -46,7 +46,7 @@ class AssignRecurringShiftForm(FlaskForm):
     # def validate_secret_code(_, secret_code):
     #     if secret_code.data != Config.SECRET_CODE:
     #         time.sleep(1)
-    #         raise ValidationError("Incorrect code. Please message the WhatsApp group for help.")
+    #         raise ValidationError("Incorrect code. Please message the WhatsApp group for guide.")
 
 
 class AssignSpecificShiftForm(FlaskForm):
