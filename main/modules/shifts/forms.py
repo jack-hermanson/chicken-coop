@@ -19,8 +19,11 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
                                              default=datetime.now, description="When was this shift completed?")
     completed_by = StringField("Completed By", validators=[], description="Who completed this shift?")
     eggs = IntegerField(
-        description="Please enter the amount of eggs you took home from the coop. (Enter 0 if none.)",
-        default="0",
+        description="Please enter the amount of eggs you took home from the coop. (Enter 0 if none.) Please only enter "
+                    "the number of eggs you took home, not the number of eggs you left for the next shift or the total "
+                    "number of eggs you saw.",
+        default=0,
+        label="Eggs Taken Home",
         validators=[Optional()],
         render_kw={
             "inputmode": "numeric",
