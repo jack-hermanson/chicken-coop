@@ -25,7 +25,8 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
         render_kw={
             "inputmode": "numeric",
             "placeholder": "The number of eggs you took home"
-        }
+        },
+        validators=[DataRequired()],
     )
     eggs_left_behind = IntegerField(
         description="Please enter the number of eggs you left for the next shift (if any). If you took all of the eggs, "
@@ -35,7 +36,8 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
         render_kw={
             "inputmode": "numeric",
             "placeholder": "Remaining eggs left behind"
-        }
+        },
+        validators=[DataRequired()]
     )
     submit = SubmitField("Save")
 

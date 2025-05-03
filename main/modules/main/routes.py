@@ -43,6 +43,7 @@ def undo_shift_instance(shift_instance_id: int):
     shift_instance.completed_timestamp = None
     shift_instance.completed_by = None
     shift_instance.eggs_taken_home = None
+    shift_instance.eggs_left_behind = None
     db.session.commit()
 
     response = make_response(redirect(url_for("main.index")))
