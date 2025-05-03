@@ -42,7 +42,7 @@ def undo_shift_instance(shift_instance_id: int):
     shift_instance = ShiftInstance.query.get_or_404(shift_instance_id)
     shift_instance.completed_timestamp = None
     shift_instance.completed_by = None
-    shift_instance.eggs = None
+    shift_instance.eggs_taken_home = None
     db.session.commit()
 
     response = make_response(redirect(url_for("main.index")))
@@ -58,7 +58,8 @@ def save_shift_instance():
         shift_instance = ShiftInstance.query.get_or_404(int(form.shift_instance_id.data))
         shift_instance.completed_timestamp = form.completed_timestamp.data
         shift_instance.completed_by = form.completed_by.data
-        shift_instance.eggs = form.eggs.data
+        shift_instance.eggs_taken_home = form.eggs_taken_home.data
+        shift_instance.eggs_left_behind = form.eggs_left_behind.data
         db.session.commit()
 
         response = make_response(redirect(url_for("main.index")))

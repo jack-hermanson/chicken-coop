@@ -15,19 +15,28 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
     Form for setting when a shift instance was completed and who completed it.
     """
     shift_instance_id = HiddenField()
-    completed_timestamp = DateTimeLocalField(label="Completed Time", format='%Y-%m-%dT%H:%M', validators=[Optional()],
+    completed_timestamp = DateTimeLocalField(label="Completed Time", format='%Y-%m-%dT%H:%M',
                                              default=datetime.now, description="When was this shift completed?")
     completed_by = StringField("Completed By", validators=[], description="Who completed this shift?")
-    eggs = IntegerField(
+    eggs_taken_home = IntegerField(
         description="Please enter the amount of eggs you took home from the coop. (Enter 0 if none.) Please only enter "
                     "the number of eggs you took home, not the number of eggs you left for the next shift or the total "
                     "number of eggs you saw.",
         default=0,
         label="Eggs Taken Home",
-        validators=[Optional()],
         render_kw={
             "inputmode": "numeric",
             "placeholder": "The number of eggs you took home"
+        }
+    )
+    eggs_left_behind = IntegerField(
+        description="Please enter the number of eggs you left for the next shift (if any). If you took all of the eggs,"
+                    "please enter 0 in this field.",
+        default=0,
+        label="Eggs Left Behind",
+        render_kw={
+            "inputmode": "numeric",
+            "placeholder": "Remaining eggs left behind"
         }
     )
     submit = SubmitField("Save")

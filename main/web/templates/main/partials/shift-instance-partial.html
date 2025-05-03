@@ -41,9 +41,9 @@
                 </p>
             {% endif %}
 
-            {% if shift_instance_model.shift_instance.eggs != None %}
-                <p class="my-0">Eggs Collected: <b>{{ shift_instance_model.shift_instance.eggs }}</b></p>
-            {% endif %}
+            <p class="my-0">Eggs Taken Home: <b>{{ shift_instance_model.shift_instance.eggs_taken_home or 0 }}</b></p>
+
+            <p class="my-0">Eggs Left Behind: <b>{{ shift_instance_model.shift_instance.eggs_left_behind or 0 }}</b></p>
 
             {% if shift_instance_model.shift_instance.instance_assigned_to != None %}
                 <p class="mb-0">
@@ -96,12 +96,12 @@
                             {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "completed_by", required=True, class="", render_kw={"class": "form-control-sm form-control"}) }}
                             {% if shift_instance_model.shift_instance.shift.time_of_day == 2 %}
                                 <div class="py-1 px-2 rounded-2" style="border: 1px solid white;">
-                                    <p class="mb-0">Please only take 4 eggs on evening shifts to help make sure the
-                                        morning
-                                        person gets eggs too.</p>
+                                    <p class="mb-0">Chickens tend to lay their eggs during the day, so please only take
+                                    half of the eggs in the coop and leave the rest for the morning shift.</p>
                                 </div>
                             {% endif %}
-                            {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "eggs", required=False, class="", render_kw={"class": "form-control-sm form-control"}) }}
+                            {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "eggs_taken_home", required=True, class="", render_kw={"class": "form-control-sm form-control"}) }}
+                            {{ form_group(shift_instance_model.shift_instance_completed_timestamp_form, "eggs_left_behind", required=True, class="", render_kw={"class": "form-control-sm form-control"}) }}
                             <div class="mt-auto pt-3">
                                 {{ shift_instance_model.shift_instance_completed_timestamp_form.submit(class="btn btn-sm btn-success mt-auto") }}
                                 <button class="btn btn-danger btn-sm" hx-replace-url="true" hx-target="body"

@@ -42,7 +42,8 @@ class ShiftInstance(db.Model):
     sunrise_utc = db.Column(db.DateTime, nullable=True)
     sunset_utc = db.Column(db.DateTime, nullable=True)
 
-    eggs = db.Column(db.Integer, nullable=True)
+    eggs_taken_home = db.Column(db.Integer, nullable=True)
+    eggs_left_behind = db.Column(db.Integer, nullable=True)
 
 
 class SpecificShiftInstanceAssignment(db.Model):

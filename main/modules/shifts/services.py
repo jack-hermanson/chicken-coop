@@ -107,7 +107,8 @@ def generate_shift_instance_view_model(shift_instance: ShiftInstance, default_na
         if shift_instance.completed_timestamp:
             form.completed_timestamp.data = shift_instance.completed_timestamp
             form.completed_by.data = shift_instance.completed_by
-            form.eggs.data = shift_instance.eggs
+            form.eggs_taken_home.data = shift_instance.eggs_taken_home
+            form.eggs_left_behind.data = shift_instance.eggs_left_behind
     else:
         form = None
 
@@ -252,8 +253,8 @@ def update_shift_instance_with_assignment(new_shift_instance: ShiftInstance, shi
 
 def get_average_eggs_for_all_shifts():
     return (db.session
-            .query(func.avg(ShiftInstance.eggs))
-            .filter(ShiftInstance.eggs.is_not(None))
+            .query(func.avg(ShiftInstance.eggs_taken_home))
+            .filter(ShiftInstance.eggs_taken_home.is_not(None))
             .scalar())
 
 
@@ -262,10 +263,10 @@ def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: T
     cutoff_date = datetime.now() - timedelta(weeks=weeks_ago)
 
     average_eggs = (db.session
-                    .query(func.avg(ShiftInstance.eggs))
+                    .query(func.avg(ShiftInstance.eggs_taken_home))
                     .join(ShiftInstance.shift)
                     .filter(and_(
-        ShiftInstance.eggs.isnot(None),
+        ShiftInstance.eggs_taken_home.isnot(None),
         ShiftInstance.due_date >= cutoff_date,
         Shift.time_of_day == time_of_day,
         Shift.day_of_week == day_of_week
@@ -321,7 +322,7 @@ def get_raw_shift_instance_data() -> str:
             str(shift_instance.shift.time_of_day),
             shift_instance.completed_by.strip() if shift_instance.completed_by is not None else "null",
             shift_instance.completed_timestamp.strftime("%T") if shift_instance.completed_timestamp is not None else "null",
-            str(shift_instance.eggs) if shift_instance.eggs is not None else "null",
+            str(shift_instance.eggs_taken_home) if shift_instance.eggs_taken_home is not None else "null",
         ]) for shift_instance in raw_data
     ]
     output_string = ",".join(headers) + "\n"
@@ -335,13 +336,13 @@ def test_filter():
     cutoff_date = datetime.now() - timedelta(weeks=8)
     data = ShiftInstance.query.filter(and_(
         ShiftInstance.due_date >= cutoff_date,
-        ShiftInstance.eggs.isnot(None)
+        ShiftInstance.eggs_taken_home.isnot(None)
     )).all()
     result = []
     for item in data:
         result.append({
             "due_date": item.due_date.__str__(),
-            "eggs": item.eggs
+            "eggs": item.eggs_taken_home
         })
     return result
 

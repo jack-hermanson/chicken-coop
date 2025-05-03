@@ -31,7 +31,7 @@ def send_status_email():
     shift_was_completed_text = (f"Completed by {relevant_shift_instance.completed_by} at"
                                 f"{relevant_shift_instance.completed_timestamp.strftime('%l:%M %p')}") \
         if shift_was_completed else f"NOT COMPLETED by {person_responsible}"
-    eggs = relevant_shift_instance.eggs
+    eggs = relevant_shift_instance.eggs_taken_home
 
     day_of_week_str = date_functions.day_of_week_str(relevant_shift_instance.shift.day_of_week)
     time_of_day_str = date_functions.time_of_day_str(relevant_shift_instance.shift.time_of_day)
