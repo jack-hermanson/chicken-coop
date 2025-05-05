@@ -3,7 +3,7 @@ import time
 from flask_wtf import FlaskForm
 from wtforms import DateTimeLocalField, StringField, SubmitField, HiddenField, TelField, BooleanField, SelectField, \
     DateField, IntegerField
-from wtforms.validators import DataRequired, Optional, ValidationError, Length
+from wtforms.validators import DataRequired, Optional, ValidationError, Length, InputRequired
 from datetime import datetime
 from main import Config
 from utils.date_functions import time_of_day_str
@@ -26,7 +26,7 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
             "inputmode": "numeric",
             "placeholder": "The number of eggs you took home"
         },
-        validators=[DataRequired()],
+        validators=[InputRequired()],
     )
     eggs_left_behind = IntegerField(
         description="Please enter the number of eggs you left for the next shift (if any). If you took all of the eggs, "
@@ -37,7 +37,7 @@ class ShiftInstanceCompletedTimestampForm(FlaskForm):
             "inputmode": "numeric",
             "placeholder": "Remaining eggs left behind"
         },
-        validators=[DataRequired()]
+        validators=[InputRequired()]
     )
     submit = SubmitField("Save")
 

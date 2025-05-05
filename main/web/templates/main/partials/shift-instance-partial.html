@@ -41,9 +41,9 @@
                 </p>
             {% endif %}
 
-            <p class="my-0">Eggs Taken Home: <b>{{ shift_instance_model.shift_instance.eggs_taken_home or '-' }}</b></p>
+            <p class="my-0">Eggs Taken Home: <b>{{ shift_instance_model.shift_instance.eggs_taken_home if shift_instance_model.shift_instance.eggs_taken_home != None else '-' }}</b></p>
 
-            <p class="my-0">Eggs Left Behind: <b>{{ shift_instance_model.shift_instance.eggs_left_behind or '-' }}</b></p>
+            <p class="my-0">Eggs Left Behind: <b>{{ shift_instance_model.shift_instance.eggs_left_behind if shift_instance_model.shift_instance.eggs_left_behind != None else '-' }}</b></p>
 
             {% if shift_instance_model.shift_instance.instance_assigned_to != None %}
                 <p class="mb-0">
