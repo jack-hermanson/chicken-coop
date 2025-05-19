@@ -4,7 +4,7 @@ import time
 
 from dateutil import tz
 from flask import flash
-from sqlalchemy import and_, or_, func
+from sqlalchemy import and_, or_, func, desc
 
 from main import logger, db
 from utils.date_functions import get_next_date_with_same_day_of_week, day_of_week_str, time_of_day_str, extract_date
@@ -305,7 +305,7 @@ def get_raw_shift_instance_data() -> str:
     raw_data = (ShiftInstance.query
                 .filter(ShiftInstance.due_date <= datetime.today())
                 .join(ShiftInstance.shift)
-                .order_by(ShiftInstance.due_date, Shift.time_of_day)
+                .order_by(desc(ShiftInstance.due_date), Shift.time_of_day)
                 .all())
     headers = [
         "shift_instance_id",
