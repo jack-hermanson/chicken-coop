@@ -30,16 +30,7 @@
                     *
                 {% endif %}
             </p>
-            {% if shift_instance_model.sunrise and not shift_instance_model.shift_instance.completed_timestamp %}
-                <p class="mb-0">
-                    Ideally before: <b>~{{ shift_instance_model.target_time }}</b>
-                </p>
-            {% endif %}
-            {% if shift_instance_model.sunset and not shift_instance_model.shift_instance.completed_timestamp %}
-                <p class="mb-0">
-                    Sunset: <b>{{ shift_instance_model.sunset }}</b>
-                </p>
-            {% endif %}
+
 
             <p class="my-0">Eggs Taken Home: <b>{{ shift_instance_model.shift_instance.eggs_taken_home if shift_instance_model.shift_instance.eggs_taken_home != None else '-' }}</b></p>
 
