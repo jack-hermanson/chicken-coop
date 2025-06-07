@@ -125,3 +125,8 @@ def table():
                            morning_shifts=table_shifts["morning_shifts"],
                            evening_shifts=table_shifts["evening_shifts"])
 
+
+@main.route("/about")
+def about():
+    """Redirect to new site"""
+    return redirect("https://new.moreychickens.org/about", code=302)
