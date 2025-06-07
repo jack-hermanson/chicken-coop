@@ -127,6 +127,7 @@ def table():
 
 
 @main.route("/about")
+@main.route("/info")
 def about():
     """Redirect to new site"""
     return redirect("https://new.moreychickens.org/about", code=302)
