@@ -26,7 +26,8 @@
                 <span>
                     Morey Chicken Coop
                 </span>
-                {% if environment != "production" %}<span class="d-flex my-auto pt-1" style="font-family: monospace; color: #fff; text-shadow: #222 0px 0px 5px, #ffaaff 0px 0px 10px, #ffaaff 0px 0px 15px; margin-left: 5px; font-size: 12px;">{{' {'}}{{ environment }}{{'}'}}</span>{% endif %}
+                {% if environment != "production" %}<span class="d-flex my-auto pt-1"
+                                                          style="font-family: monospace; color: #fff; text-shadow: #222 0px 0px 5px, #ffaaff 0px 0px 10px, #ffaaff 0px 0px 15px; margin-left: 5px; font-size: 12px;">{{ ' {' }}{{ environment }}{{ '}' }}</span>{% endif %}
             </span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
@@ -43,9 +44,15 @@
                     <a href="{{ url_for('shifts.recurring_shift_signup') }}"
                        class="nav-link {% if active_route == 'shifts' %}active{% endif %}">Shift Signup</a>
                 </li>
-             <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ url_for('guide.index') }}"
                        class="nav-link {% if active_route == 'guide' %}active{% endif %}">Guide</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('dues.index') }}"
+                        class="nav-link {% if active_route == 'dues' %}active{% endif %}">
+                    Dues
+                    </a>
                 </li>
                 {% if current_user.is_authenticated and current_user.clearance >= 2 %}
                     <li class="nav-item">

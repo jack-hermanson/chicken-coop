@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% set title = "Dues Information" %}
+{% set active_route = "dues" %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <p class="lead">
+                In order to pay for the chickens' food and other supplies, we have to collect dues from our members.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <h3>How much are the dues?</h3>
+            <p>
+                Based on our shared decision-making a few meetings ago, we’re moving to a sliding scale for dues. Our
+                first year (2024-2025), dues were $50; this year (June 2025-May 2026), they’ll be $25-$125, depending on
+                where you land. The first year was a guess on costs, and they were a little higher than we expected,
+                hence the increase. With the sliding scale, you are the person that determines what you pay.
+            </p>
+
+            <div class="mb-3">
+                <img src="{{ url_for('static', filename='images/green-bottle.webp') }}"
+                     class="img-fluid rounded"
+                     alt="Three bottles with different levels of green fluid representing one's ability to pay dues">
+            </div>
+
+            <p>
+                We're using the "Green Bottle Method" for our sliding scale, from Alexis J. Cunningfolk at Worts &
+                Cunning Apothecary. Please
+                <a href="https://www.wortsandcunning.com/blog/sliding-scale" target="_blank" rel="noopener">
+                    read their blog post here
+                </a>
+                for a detailed theoretical and practical guide to
+                this method.
+                From their blog post, here is a description of a sliding scale: “The sliding scale is a tool that allows
+                for a product or service to be obtained at multiple price points based on the circumstances of the
+                purchaser….The sliding scale represents the idea that financial resources, including income, are not and
+                should not be the only determining factor in whether or not someone can access services/care/etc.”
+            </p>
+
+            <p>
+                If you’re a full green bottle person, that’s $125; half full bottle, $75, and only a little green, $25.
+                This is based on self assessment, and you’re the only person that knows what works for you - so please
+                feel comfortable making that choice and knowing that this community will support each other in
+                participating in the chicken co-op!
+            </p>
+
+            <p>
+                Here is the venmo: <a href="https://venmo.com/u/moreychickencoop" target="_blank" rel="noopener">https://venmo.com/u/moreychickencoop</a>
+            </p>
+
+            <p>
+                If you have more resources to share and want to share more, awesome! If $25 is unattainable for you, let
+                us know and we’ll work it out.
+            </p>
+        </div>
+    </div>
+{% endblock body %}

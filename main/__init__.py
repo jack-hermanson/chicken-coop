@@ -1,21 +1,20 @@
 from __future__ import annotations
 
-import sys
-from logging.handlers import TimedRotatingFileHandler
-
-from flask_bcrypt import Bcrypt
-from flask import Flask, abort
-from main.config import Config
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager
-from flask_mail import Mail
-
 import logging
 import os
-
+import sys
 from datetime import date, datetime
-from logger import StreamLogFormatter, FileLogFormatter
+from logging.handlers import TimedRotatingFileHandler
+
+from flask import Flask, abort
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+from flask_mail import Mail
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+
+from logger import FileLogFormatter, StreamLogFormatter
+from main.config import Config
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -34,7 +33,7 @@ def create_app(config_class=Config):
         __name__,
         static_url_path="/static",
         static_folder="web/static",
-        template_folder="web/templates"
+        template_folder="web/templates",
     )
 
     # set up environment variables
@@ -50,9 +49,9 @@ def create_app(config_class=Config):
     bcrypt.init_app(app)
 
     # models
+    from .modules.accounts import models
     from .modules.people import models
     from .modules.shifts import models
-    from .modules.accounts import models
 
     # database
     db.app = app
@@ -63,16 +62,17 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
 
     # routes and blueprints
-    from .modules.main.routes import main
-    from .modules.admin.routes import admin
     from .modules.accounts.routes import accounts
-    from .modules.shifts.routes import shifts
-    from .modules.errors.handlers import errors
+    from .modules.admin.routes import admin
+    from .modules.dues.routes import dues
     from .modules.email.routes import emails
+    from .modules.errors.handlers import errors
     from .modules.guide.routes import guide
+    from .modules.main.routes import main
+    from .modules.shifts.routes import shifts
 
     app.url_map.strict_slashes = False  # for trailing slashes
-    for blueprint in [main, accounts, admin, shifts, errors, emails, guide]:
+    for blueprint in [main, accounts, admin, shifts, errors, emails, guide, dues]:
         app.register_blueprint(blueprint)
 
     # login manager
@@ -90,24 +90,27 @@ def create_app(config_class=Config):
     @app.template_filter()
     def day_of_week_str(raw):
         from utils import date_functions
+
         return date_functions.day_of_week_str(raw)
 
     @app.template_filter()
     def time_of_day_str(raw):
         from utils import date_functions
+
         return date_functions.time_of_day_str(raw)
 
     @app.template_filter()
     def extract_date(date_or_datetime: date | datetime):
         from utils import date_functions
+
         return date_functions.extract_date(date_or_datetime)
 
     @app.template_filter()
     def number_suffix(value):
         if 10 <= value % 100 <= 20:
-            suffix = 'th'
+            suffix = "th"
         else:
-            suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(value % 10, 'th')
+            suffix = {1: "st", 2: "nd", 3: "rd"}.get(value % 10, "th")
         return f"{value}{suffix}"
 
     @app.context_processor
@@ -140,5 +143,8 @@ fh.namer = lambda name: name.replace(".txt", "") + ".txt"
 
 logger.addHandler(fh)
 logger.addHandler(sh)
-logger.setLevel(logging.DEBUG if (
-    os.environ.get("FLASK_ENV") == "dev" or os.environ.get("FLASK_ENV") == "development") else logging.INFO)
+logger.setLevel(
+    logging.DEBUG
+    if (os.environ.get("FLASK_ENV") == "dev" or os.environ.get("FLASK_ENV") == "development")
+    else logging.INFO
+)
