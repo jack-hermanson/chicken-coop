@@ -22,9 +22,12 @@
             </p>
 
             <div class="mb-3">
-                <img src="{{ url_for('static', filename='images/green-bottle.webp') }}"
-                     class="img-fluid rounded"
-                     alt="Three bottles with different levels of green fluid representing one's ability to pay dues">
+                <picture>
+                    <source srcset="{{ url_for('static', filename='images/green-bottle.png') }}">
+                    <img src="{{ url_for('static', filename='images/green-bottle.webp') }}"
+                         class="img-fluid rounded"
+                         alt="Three bottles with different levels of green fluid representing one's ability to pay dues">
+                </picture>
             </div>
 
             <p>
