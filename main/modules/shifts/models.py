@@ -8,6 +8,7 @@ class Shift(db.Model):
     There will be 14, so 2 per day.
     Every shift creates a new ShiftInstance.
     """
+
     shift_id = db.Column(db.Integer, primary_key=True)
     day_of_week = db.Column(db.Integer, nullable=False, default=DayOfWeekEnum.MONDAY)
     time_of_day = db.Column(db.Integer, nullable=False, default=TimeOfDayEnum.MORNING)
@@ -26,6 +27,7 @@ class ShiftInstance(db.Model):
     """
     One instance of the shift. It has a specific date.
     """
+
     shift_instance_id = db.Column(db.Integer, primary_key=True)
 
     shift_id = db.mapped_column(db.ForeignKey("shift.shift_id"), nullable=False)
@@ -44,6 +46,9 @@ class ShiftInstance(db.Model):
 
     eggs_taken_home = db.Column(db.Integer, nullable=True)
     eggs_left_behind = db.Column(db.Integer, nullable=True)
+
+    # metadata not shown
+    edited_timestamp = db.Column(db.DateTime, nullable=True)
 
 
 class SpecificShiftInstanceAssignment(db.Model):
