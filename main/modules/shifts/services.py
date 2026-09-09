@@ -67,7 +67,7 @@ def generate_next_shift_instances():
         if len(future_shift_instances) != 1:
             logger.error(
                 f"There {'is' if len(future_shift_instances) == 1 else 'are'} {len(future_shift_instances)} shift "
-                f"instance{'' if len(future_shift_instances) == 1 else 's'} for shift with ID {shift.shift_id}"
+                f"instance{'' if len(future_shift_instances) == 1 else 's'} for shift with ID {shift.shift_id}",
             )
             raise ValueError("Bad shift instance count")
         shift_instances_to_return.append(future_shift_instances[0])
@@ -129,13 +129,14 @@ def generate_shift_instance_view_model(shift_instance: ShiftInstance, default_na
             else None
         ),
         target_time=(
-            (shift_instance.sunrise_utc + timedelta(minutes=30))
-            .replace(tzinfo=from_zone)
-            .astimezone(to_zone)
-            .strftime("%l:%M %p")
-            if shift_instance.sunrise_utc is not None
-            else None
+            (shift_instance.sunrise_utc + timedelta(minutes=30)).replace(tzinfo=from_zone).astimezone(to_zone)
+            # .strftime("%l:%M %p")
+            if (shift_instance.sunrise_utc is not None)
+            else (shift_instance.sunset_utc + timedelta(minutes=60)).replace(tzinfo=from_zone).astimezone(to_zone)
+            # .strftime("%l:%M %p")
+            # else None
         ),
+        current_time=datetime.now(tz=to_zone),
         # target_time=(
         #     (shift_instance.sunrise_utc.replace(tzinfo=from_zone).astimezone(to_zone) + timedelta(minutes=30)).strftime(
         #         "%l:%M %p") if shift_instance.sunset_utc else None),
@@ -181,7 +182,7 @@ def generate_alert_for_shifts_that_need_signups():
     if len(shifts_that_need_signups):
         logger.info(
             f"There {'is' if len(shifts_that_need_signups) else 'are'} {len(shifts_that_need_signups)} "
-            f"shift{'' if len(shifts_that_need_signups) else 's'} that need signups"
+            f"shift{'' if len(shifts_that_need_signups) else 's'} that need signups",
         )
         message = "The following shifts are looking for volunteers: "
         for index, shift in enumerate(shifts_that_need_signups):
@@ -219,11 +220,11 @@ def assign_specific_shift(assign_specific_shift_form: AssignSpecificShiftForm) -
     if existing_specific_shift_instance_assignment:
         logger.warn(
             f"Updating existing specific shift instance assignment with ID "
-            f"{existing_specific_shift_instance_assignment.specific_shift_instance_assignment_id}"
+            f"{existing_specific_shift_instance_assignment.specific_shift_instance_assignment_id}",
         )
         logger.debug(
             f"{existing_specific_shift_instance_assignment.instance_date.strftime('%F')} "
-            f"{time_of_day_str(existing_specific_shift_instance_assignment.time_of_day)}"
+            f"{time_of_day_str(existing_specific_shift_instance_assignment.time_of_day)}",
         )
         # only need to change person, no need to set date and time
         logger.debug(f"Original: {existing_specific_shift_instance_assignment.instance_assigned_to}")
@@ -295,7 +296,7 @@ def get_average_eggs_for_day_and_time(day_of_week: DayOfWeekEnum, time_of_day: T
                 ShiftInstance.due_date >= cutoff_date,
                 Shift.time_of_day == time_of_day,
                 Shift.day_of_week == day_of_week,
-            )
+            ),
         )
         .scalar()
     ) or 0
@@ -381,7 +382,7 @@ def test_filter():
         and_(
             ShiftInstance.due_date >= cutoff_date,
             ShiftInstance.eggs_taken_home.isnot(None),
-        )
+        ),
     ).all()
     result = []
     for item in data:
@@ -389,7 +390,7 @@ def test_filter():
             {
                 "due_date": item.due_date.__str__(),
                 "eggs": item.eggs_taken_home,
-            }
+            },
         )
     return result
 

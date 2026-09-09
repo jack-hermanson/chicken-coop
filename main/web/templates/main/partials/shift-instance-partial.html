@@ -14,6 +14,9 @@
                     <span class="me-2">✅</span> Completed
                     {{ shift_instance_model.shift_instance.completed_timestamp.strftime("%a, %b %e at %l:%M%p") }} by
                     {{ shift_instance_model.shift_instance.completed_by }}
+                {% elif shift_instance_model.target_time.date() > shift_instance_model.current_time.date() %}
+                    <span class="me-2">🕒</span>
+                    (not today)
                 {% else %}
                     <span class="me-2">❌</span>
                     Not completed

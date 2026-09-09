@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 
-from main.modules.shifts.forms import ShiftInstanceCompletedTimestampForm, AssignRecurringShiftForm
-from main.modules.shifts.models import ShiftInstance, Shift
+from main.modules.shifts.forms import AssignRecurringShiftForm, ShiftInstanceCompletedTimestampForm
+from main.modules.shifts.models import Shift, ShiftInstance
 
 
 @dataclass
@@ -14,6 +14,7 @@ class ShiftInstanceViewModel:
     sunrise: datetime.date
     sunset: datetime.date
     target_time: datetime.date
+    current_time: datetime.date
 
 
 @dataclass
